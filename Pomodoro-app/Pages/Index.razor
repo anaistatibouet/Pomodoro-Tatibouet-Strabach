@@ -11,8 +11,8 @@
     <p>@timeElapsed</p>
 </div>
 
-<button class="btn btn-primary" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
-<button class="btn btn-danger" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+<button class="btn btn-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
+<button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
 
 @code {
     public Pomodoro currentPomodoro = new Pomodoro();
@@ -30,22 +30,23 @@
 
     public void TimeElapsed()
     {
-        timeElapsed = currentPomodoro.TimeElapsed();
+        // Renvoie des secondes
+        timeElapsed = TimeSpan.FromMilliseconds(currentPomodoro.TimeElapsed()).TotalSeconds;
     }
 
     protected override void OnInitialized()
     {
+        // Permet de rafraîchir le pomodoro
         var timer = new Timer(new TimerCallback(_ =>
         {
-            timeElapsed = currentPomodoro.TimeElapsed();
+            TimeElapsed();
 
             InvokeAsync(() =>
-			{
-				StateHasChanged();
-			});
+            {
+                StateHasChanged();
+            });
 
         }), null, 1000, 1000);
     }
-
 }
 

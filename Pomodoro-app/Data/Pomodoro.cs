@@ -40,7 +40,7 @@ namespace Pomodoro.Data
 
         public double TimeElapsed()
         {
-            return WorkTimeInMilliseconds - TimeSpan.FromMilliseconds(StopWatch.ElapsedMilliseconds).TotalMinutes;
+            return WorkTimeInMilliseconds - StopWatch.ElapsedMilliseconds;
         }
     }
 }
