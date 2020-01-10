@@ -1,0 +1,52 @@
+﻿@page "/"
+@using System.Threading;
+@using Data;
+@using System;
+
+<h1>Projet Pomodoro</h1>
+<p>Gérez son temps comme il faut</p>
+
+<div>
+    <h2>Travail Pomodoro</h2>
+    <p>@timeElapsed</p>
+</div>
+
+<button class="btn btn-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
+<button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+
+@code {
+    public Pomodoro currentPomodoro = new Pomodoro();
+    public double timeElapsed;
+
+    public void Start()
+    {
+        currentPomodoro.StartTimer();
+    }
+
+    public void Stop()
+    {
+        currentPomodoro.StopTimer();
+    }
+
+    public void TimeElapsed()
+    {
+        // Renvoie des secondes
+        timeElapsed = TimeSpan.FromMilliseconds(currentPomodoro.TimeElapsed()).TotalSeconds;
+    }
+
+    protected override void OnInitialized()
+    {
+        // Permet de rafraîchir le pomodoro
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            TimeElapsed();
+
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+        }), null, 1000, 1000);
+    }
+}
+
