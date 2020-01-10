@@ -1,5 +1,31 @@
 ﻿@page "/"
+@using System.Threading;
+@using Data;
+@using System;
 
-<h1>Hello, world!</h1>
+<h1>Projet Pomodoro</h1>
+<p>Gérez son temps comme il faut</p>
 
-Welcome to your new app.
+<div>
+    <h2>Travail Pomodoro</h2>
+</div>
+
+
+<button class="btn btn-primary" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
+<button class="btn btn-danger" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+
+@code {
+    public Countdown currentCountdown = new Countdown();
+
+    public void Start()
+    {
+        currentCountdown.StartTimer();
+    }
+
+    public void Stop()
+    {
+        currentCountdown.StopTimer();
+    }
+
+}
+
