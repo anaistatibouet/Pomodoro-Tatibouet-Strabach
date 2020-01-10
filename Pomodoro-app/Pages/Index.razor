@@ -8,23 +8,29 @@
 
 <div>
     <h2>Travail Pomodoro</h2>
+    <p>@timeElapsed</p>
 </div>
-
 
 <button class="btn btn-primary" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
 <button class="btn btn-danger" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
 
 @code {
-    public Countdown currentCountdown = new Countdown();
+    public Pomodoro currentPomodoro = new Pomodoro();
+    public double timeElapsed;
 
     public void Start()
     {
-        currentCountdown.StartTimer();
+        currentPomodoro.StartTimer();
     }
 
     public void Stop()
     {
-        currentCountdown.StopTimer();
+        currentPomodoro.StopTimer();
+    }
+
+    public void TimeElapsed()
+    {
+        timeElapsed = currentPomodoro.TimeElapsed();
     }
 
 }
