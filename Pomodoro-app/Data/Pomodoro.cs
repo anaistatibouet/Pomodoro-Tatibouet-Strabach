@@ -7,15 +7,17 @@ using System.Timers;
 
 namespace Pomodoro.Data
 {
-    public class Countdown
+    public class Pomodoro
     {
-        private Timer Timer;
+        private Timer WorkTimer;
         private Stopwatch StopWatch;
+        double WorkTimeInMilliseconds;
 
-        public Countdown()
+        public Pomodoro()
         {
-            Timer = new Timer(TimeSpan.FromMinutes(3).TotalMilliseconds);
-            Timer.Elapsed += Timer_Elapsed;
+            WorkTimeInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+            WorkTimer = new Timer(WorkTimeInMilliseconds);
+            WorkTimer.Elapsed += Timer_Elapsed;
             StopWatch = new Stopwatch();
         }
 
@@ -26,21 +28,19 @@ namespace Pomodoro.Data
 
         public void StartTimer()
         {
-            Timer.Start();
+            WorkTimer.Start();
             StopWatch.Start();
         }
 
-        // StopWtch.Elapsed => temps écoulé depuis le stopWatch.start
-
         public void StopTimer()
         {
-            Timer.Stop();
+            WorkTimer.Stop();
+            StopWatch.Stop();
         }
 
         public double TimeElapsed()
         {
-            return 3 - TimeSpan.FromMilliseconds(StopWatch.ElapsedMilliseconds).TotalMinutes;
+            return WorkTimeInMilliseconds - TimeSpan.FromMilliseconds(StopWatch.ElapsedMilliseconds).TotalMinutes;
         }
-
     }
 }

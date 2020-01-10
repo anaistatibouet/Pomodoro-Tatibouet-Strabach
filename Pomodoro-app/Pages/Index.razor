@@ -33,5 +33,19 @@
         timeElapsed = currentPomodoro.TimeElapsed();
     }
 
+    protected override void OnInitialized()
+    {
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            timeElapsed = currentPomodoro.TimeElapsed();
+
+            InvokeAsync(() =>
+			{
+				StateHasChanged();
+			});
+
+        }), null, 1000, 1000);
+    }
+
 }
 
