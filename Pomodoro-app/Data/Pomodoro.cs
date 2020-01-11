@@ -9,15 +9,15 @@ namespace Pomodoro.Data
 {
     public class Pomodoro
     {
-        private Timer WorkTimer;
+        private Timer TimerPomodoro;
         private Stopwatch StopWatch;
-        double WorkTimeInMilliseconds;
+        private double TimerPomodoroInMilliseconds;
 
         public Pomodoro()
         {
-            WorkTimeInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
-            WorkTimer = new Timer(WorkTimeInMilliseconds);
-            WorkTimer.Elapsed += Timer_Elapsed;
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+            TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
+            TimerPomodoro.Elapsed += Timer_Elapsed;
             StopWatch = new Stopwatch();
         }
 
@@ -26,21 +26,26 @@ namespace Pomodoro.Data
             //CODE APPELE QUAND LE TEMPS EST ECOULE
         }
 
-        public void StartTimer()
+        public void StartPomodoro()
         {
-            WorkTimer.Start();
+            TimerPomodoro.Start();
             StopWatch.Start();
         }
 
-        public void StopTimer()
+        public void StopPomodoro()
         {
-            WorkTimer.Stop();
+            TimerPomodoro.Stop();
             StopWatch.Stop();
+        }
+
+        public void ResetPomodoro()
+        {
+            StopWatch.Reset();
         }
 
         public double TimeElapsed()
         {
-            return WorkTimeInMilliseconds - StopWatch.ElapsedMilliseconds;
+            return TimerPomodoroInMilliseconds - StopWatch.ElapsedMilliseconds;
         }
     }
 }

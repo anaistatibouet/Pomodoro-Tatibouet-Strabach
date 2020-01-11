@@ -11,27 +11,33 @@
     <p>@timeElapsed</p>
 </div>
 
-<button class="btn btn-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
+<button class="btn btn-outline-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
 <button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+<button class="btn btn-outline-warning" @onclick="Reset"><span class="oi oi-action-undo"></span> Réinitialiser</button>
 
 @code {
     public Pomodoro currentPomodoro = new Pomodoro();
-    public double timeElapsed;
+    private double timeElapsed { get; set; }
+    private string timeElapsedString { get; set;  }
 
     public void Start()
     {
-        currentPomodoro.StartTimer();
+        currentPomodoro.StartPomodoro();
     }
 
     public void Stop()
     {
-        currentPomodoro.StopTimer();
+        currentPomodoro.StopPomodoro();
+    }
+
+    public void Reset()
+    {
+        currentPomodoro.ResetPomodoro();
     }
 
     public void TimeElapsed()
     {
-        // Renvoie des secondes
-        timeElapsed = TimeSpan.FromMilliseconds(currentPomodoro.TimeElapsed()).TotalSeconds;
+        timeElapsed = currentPomodoro.TimeElapsed();
     }
 
     protected override void OnInitialized()
