@@ -3,24 +3,28 @@
 @using Data;
 @using System;
 
-<h1>Projet Pomodoro</h1>
-<p>Gérez son temps comme il faut</p>
-
 <div>
-    <h2>Travail</h2>
-    <p>@timeElapsed</p>
+    <h1>Projet Pomodoro</h1>
+    <p>Gérer son temps comme il faut</p>
 </div>
 
-<div>
-    <button class="btn btn-outline-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
-    <button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
-    <button class="btn btn-outline-warning" @onclick="Reset"><span class="oi oi-reload"></span> Réinitialiser</button>
+<div class="card text-center m-auto" style="width: 30vw;">
+    <div class="card-header bg-dark text-light">
+        <h2>Travail</h2>
+    </div>
+    <div class="card-body">
+        <h1 class="m-5">@timeElapsedString</h1>
+        <button class="btn btn-success" @onclick="Start"><span class="oi oi-media-play"></span> Démarrer</button>
+        <button class="btn btn-danger" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+        <button class="btn btn-warning" @onclick="Reset"><span class="oi oi-reload"></span> Réinitialiser</button>
+    </div>
 </div>
 
 @code {
     public Pomodoro currentPomodoro = new Pomodoro();
     private double timeElapsed { get; set; }
     private string timeElapsedString { get; set;  }
+    private TimeSpan t { get; set; }
 
     public void Start()
     {
@@ -40,7 +44,10 @@
     public void TimeElapsed()
     {
         timeElapsed = currentPomodoro.TimeElapsed();
+        t = TimeSpan.FromMilliseconds(timeElapsed);
+        timeElapsedString = string.Format("{0:D2} min {1:D2} sec", t.Minutes, t.Seconds); // Permet d'afficher les minutes et les secondes
     }
+
 
     protected override void OnInitialized()
     {
@@ -56,5 +63,6 @@
 
         }), null, 1000, 1000);
     }
+
 }
 
