@@ -3,18 +3,17 @@
 @using Data;
 @using System;
 
-<h1>Projet Pomodoro</h1>
-<p>Gérez son temps comme il faut</p>
-
 <div>
-    <h2>Travail</h2>
+    <h1>Projet Pomodoro</h1>
+    <p>Gérer son temps comme il faut</p>
 </div>
 
-<div class="card text-center">
+<div class="card text-center m-auto" style="width: 30vw;">
     <div class="card-header bg-dark text-light">
-        <h1>@timeElapsedString</h1>
+        <h2>Travail</h2>
     </div>
     <div class="card-body">
+        <h1 class="m-5">@timeElapsedString</h1>
         <button class="btn btn-success" @onclick="Start"><span class="oi oi-media-play"></span> Démarrer</button>
         <button class="btn btn-danger" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
         <button class="btn btn-warning" @onclick="Reset"><span class="oi oi-reload"></span> Réinitialiser</button>
