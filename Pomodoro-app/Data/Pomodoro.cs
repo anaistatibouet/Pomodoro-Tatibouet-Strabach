@@ -15,6 +15,7 @@ namespace Pomodoro.Data
 
         public Pomodoro()
         {
+            // Initialisation du pomodoro : timer et chrono 
             TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
@@ -26,23 +27,36 @@ namespace Pomodoro.Data
             //CODE APPELE QUAND LE TEMPS EST ECOULE
         }
 
+        /// <summary>
+        /// Permet de démarrer le pomodoro 
+        /// </summary>
         public void StartPomodoro()
         {
             TimerPomodoro.Start();
             StopWatch.Start();
         }
 
+        /// <summary>
+        /// Permet de mettre en pause le pomodoro
+        /// </summary>
         public void StopPomodoro()
         {
             TimerPomodoro.Stop();
             StopWatch.Stop();
         }
 
+        /// <summary>
+        /// Permet de remettre le pomodoro à son état initial
+        /// </summary>
         public void ResetPomodoro()
         {
             StopWatch.Reset();
         }
-
+        
+        /// <summary>
+        /// Calcul du temps écoulé
+        /// </summary>
+        /// <returns>Temps écoulé en milliseconds</returns>
         public double TimeElapsed()
         {
             return TimerPomodoroInMilliseconds - StopWatch.ElapsedMilliseconds;

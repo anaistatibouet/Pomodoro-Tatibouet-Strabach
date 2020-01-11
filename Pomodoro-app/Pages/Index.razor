@@ -7,13 +7,15 @@
 <p>Gérez son temps comme il faut</p>
 
 <div>
-    <h2>Travail Pomodoro</h2>
+    <h2>Travail</h2>
     <p>@timeElapsed</p>
 </div>
 
-<button class="btn btn-outline-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
-<button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
-<button class="btn btn-outline-warning" @onclick="Reset"><span class="oi oi-action-undo"></span> Réinitialiser</button>
+<div>
+    <button class="btn btn-outline-success" @onclick="Start"><span class="oi oi-play-circle"></span> Démarrer</button>
+    <button class="btn btn-outline-dark" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
+    <button class="btn btn-outline-warning" @onclick="Reset"><span class="oi oi-reload"></span> Réinitialiser</button>
+</div>
 
 @code {
     public Pomodoro currentPomodoro = new Pomodoro();
