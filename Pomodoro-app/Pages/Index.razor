@@ -3,37 +3,39 @@
 @using Data;
 @using System;
 
-<div>
-    <h3 class="m-3 text-center">Gérer son temps comme il faut</h3>
-</div>
-
-<div class="card text-center m-auto" style="width: 60vw;">
-    <div class="card-header bg-dark text-light">
-        <h2>@titleString</h2>
-    </div>
-    <div class="card-body">
-        <h1 class="m-4">@timeElapsedString</h1>
-        <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span> Démarrer</button>
-        <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span> Pause</button>
-        <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span> Réinitialiser</button>
+<div class="bgPomodoro">
+    <div class="card text-center m-auto" style="width: 30vw;">
+        <div class="card-header bg-dark text-light">
+            <h2>@titlePomodoro</h2>
+        </div>
+        <div class="card-body">
+            <h1 class="m-4">@timeElapsedString</h1>
+            <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
+            <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
+            <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
+        </div>
     </div>
 </div>
 
 @code {
-    public Pomodoro currentPomodoro = new Pomodoro();
-    private double timeElapsed { get; set; }
-    private string timeElapsedString { get; set;  }
+    private Pomodoro currentPomodoro = new Pomodoro();
     private TimeSpan t { get; set; }
-    private string titleString = "Travail";
+    private double timeElapsed { get; set; }
+    private int indexTab;
+    private string timeElapsedString { get; set;}
+    private string titlePomodoro = "Travail";
+    private string startBtn = "Démarrer";
 
     public void Start()
     {
         currentPomodoro.StartPomodoro();
+        if (startBtn == "Redémarrer") { startBtn = "Démarrer"; }
     }
 
     public void Stop()
     {
         currentPomodoro.StopPomodoro();
+        startBtn = "Redémarrer";
     }
 
     public void Reset()
@@ -45,16 +47,21 @@
     {
         timeElapsed = currentPomodoro.TimeElapsed();
         t = TimeSpan.FromMilliseconds(timeElapsed);
-        timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds); // Permet d'afficher les minutes et les secondes
+
+        // Affichage du pomodoro avec les minutes et les secondes
+        timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
     }
 
 
+    /// <summary>
+    /// Permet de rafraîchir le pomodoro lors de l'initialisation
+    /// </summary>
     protected override void OnInitialized()
     {
-        // Permet de rafraîchir le pomodoro
         var timer = new Timer(new TimerCallback(_ =>
         {
             TimeElapsed();
+            GetPomodoroTitle();
 
             InvokeAsync(() =>
             {
@@ -64,5 +71,16 @@
         }), null, 1000, 1000);
     }
 
+    public void GetPomodoroTitle()
+    {
+        indexTab = currentPomodoro.getIndexTabSeq();
+        if((indexTab % 2) == 0)
+        {
+            titlePomodoro = "Travail";
+        } else
+        {
+            titlePomodoro = "Pause";
+        }
+    }
 }
 

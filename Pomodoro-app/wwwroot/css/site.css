@@ -28,12 +28,13 @@ app {
 
 .main {
     flex: 1;
+    padding:0;
 }
 
     .main .top-row {
         background-color: #f7f7f7;
         border-bottom: 1px solid #d6d5d5;
-        justify-content: flex-end;
+        justify-content: space-between;
     }
 
         .main .top-row > a, .main .top-row .btn-link {
@@ -97,12 +98,28 @@ app {
                 color: black;
             }
 
-            .module{
+            .sidebar-content{
                 margin-top: 1rem;
             }
 
+            .opacitybg {
+                
+            }
+
+            .bgPomodoro {
+                background-image: url("../images/cat.jpg");
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                padding: 199px 20px;
+            }
+
+            .card {
+                position: relative;
+                left: 415px;
+            }
+
 .content {
-    padding-top: 1.1rem;
+    overflow: hidden;
 }
 
 .actiontimer {
@@ -175,10 +192,10 @@ app {
         top: 0;
     }
 
-    .main > div {
+    /*.main > div {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
-    }
+    }*/
 
     .navbar-toggler {
         display: none;
