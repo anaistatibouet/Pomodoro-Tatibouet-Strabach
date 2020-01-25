@@ -12,19 +12,19 @@ namespace Pomodoro.Data
         private Timer TimerPomodoro;
         private Stopwatch StopWatch;
         private double TimerPomodoroInMilliseconds;
+        private int TabIndexSeq = 0;
+        private int[] Sequence = new int[] { 1 , 5, 1, 5, 1, 5, 1, 15 };
 
+        /// <summary>
+        /// Initialisation du pomodoro : timer et chrono. 
+        /// L'index de la séquence débute à 0
+        /// </summary>
         public Pomodoro()
         {
-            // Initialisation du pomodoro : timer et chrono 
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
             StopWatch = new Stopwatch();
-        }
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            //CODE APPELE QUAND LE TEMPS EST ECOULE
         }
 
         /// <summary>
@@ -52,7 +52,31 @@ namespace Pomodoro.Data
         {
             StopWatch.Reset();
         }
-        
+
+        /// <summary>
+        ///   Evènement appelé quand le temps est écoulé
+        ///   On incrémente l'index de la séquence pour passer au pomodoro suivant
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            StopPomodoro();
+            ResetPomodoro();
+
+            if(TabIndexSeq < 8)
+            {
+                TabIndexSeq++;
+            } else
+            {
+                TabIndexSeq = 0;
+            }
+            
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
+            TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
+            StartPomodoro();
+        }
+
         /// <summary>
         /// Calcul du temps écoulé
         /// </summary>

@@ -47,7 +47,7 @@ app {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: #0b2d76;
 }
 
     .sidebar .top-row {
@@ -79,7 +79,7 @@ app {
         }
 
         .sidebar .nav-item a {
-            color: #d7d7d7;
+            color: #ededed;
             border-radius: 4px;
             height: 3rem;
             display: flex;
@@ -89,16 +89,24 @@ app {
 
             .sidebar .nav-item a.active {
                 background-color: rgba(255,255,255,0.25);
-                color: white;
+                color: black;
             }
 
             .sidebar .nav-item a:hover {
                 background-color: rgba(255,255,255,0.1);
-                color: white;
+                color: black;
+            }
+
+            .module{
+                margin-top: 1rem;
             }
 
 .content {
     padding-top: 1.1rem;
+}
+
+.actiontimer {
+    margin: 0 10px
 }
 
 .navbar-toggler {
