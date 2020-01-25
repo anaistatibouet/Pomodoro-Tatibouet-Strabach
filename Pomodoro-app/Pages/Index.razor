@@ -3,19 +3,22 @@
 @using Data;
 @using System;
 
-<div class="bgPomodoro">
-    <div class="card text-center m-auto" style="width: 30vw;">
-        <div class="card-header bg-dark text-light">
-            <h2>@titlePomodoro</h2>
-        </div>
-        <div class="card-body">
-            <h1 class="m-4">@timeElapsedString</h1>
-            <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
-            <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
-            <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
+    <div class="bgPomodoro">
+        <div class="card text-center m-auto" style="width: 30vw;">
+            <div class="card-header bg-dark text-light">
+                <h2>@pomodoroTitle</h2>
+                <div>
+                    <button class="btn btn-outline-light" @onclick="startLazyMode"><span class="oi oi-s"></span>Mode flemme</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <h1 class="m-4">@timeElapsedString</h1>
+                <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
+                <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
+                <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
+            </div>
         </div>
     </div>
-</div>
 
 @code {
     private Pomodoro currentPomodoro = new Pomodoro();
@@ -23,8 +26,10 @@
     private double timeElapsed { get; set; }
     private int indexTab;
     private string timeElapsedString { get; set;}
-    private string titlePomodoro = "Travail";
+    private string pomodoroTitle;
+    private string[] pomodoroState = new string[]{"Travail","Pause"};
     private string startBtn = "Démarrer";
+    private bool lazyMode = false;
 
     public void Start()
     {
@@ -71,16 +76,39 @@
         }), null, 1000, 1000);
     }
 
+    /// <summary>
+    /// Pour les jours où on n'a pas du tout envie de travailler :)
+    /// Pour Benjamin c'est tout le temps ! 
+    /// </summary>
+    public void startLazyMode()
+    {
+        lazyMode = true;
+    }
+
     public void GetPomodoroTitle()
     {
         indexTab = currentPomodoro.getIndexTabSeq();
-        if((indexTab % 2) == 0)
+
+        if (lazyMode == false)
         {
-            titlePomodoro = "Travail";
+            if ((indexTab % 2) == 0 )
+            {
+                pomodoroTitle = pomodoroState[0];
+            } else
+            {
+               pomodoroTitle = pomodoroState[1];
+            }
         } else
         {
-            titlePomodoro = "Pause";
+            if((indexTab % 2) == 0)
+            {
+                 pomodoroTitle = pomodoroState[1];
+            } else
+            {
+                pomodoroTitle = pomodoroState[0];
+            }
         }
+
     }
 }
 

@@ -106,18 +106,6 @@ app {
                 
             }
 
-            .bgPomodoro {
-                background-image: url("../images/cat.jpg");
-                background-repeat: no-repeat;
-                background-size: 100% 100%;
-                padding: 199px 20px;
-            }
-
-            .card {
-                position: relative;
-                left: 415px;
-            }
-
 .content {
     overflow: hidden;
 }
@@ -153,6 +141,19 @@ app {
     width: 100%;
     z-index: 1000;
 }
+
+.bgPomodoro {
+    background-image: url("../images/cat.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 180px 20px;
+}
+
+.card {
+    position: relative;
+    left: 415px;
+}
+
 
 #blazor-error-ui .dismiss {
     cursor: pointer;

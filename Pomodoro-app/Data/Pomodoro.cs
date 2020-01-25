@@ -10,7 +10,8 @@ namespace Pomodoro.Data
         private Stopwatch StopWatch;
         private double TimerPomodoroInMilliseconds;
         private int TabIndexSeq = 0;
-        private int[] Sequence = new int[] { 25 , 5, 25, 5, 25, 5, 25, 15 };
+        private int[] Sequence = new int[] { 1 , 5, 25, 5, 25, 5, 25, 15 };
+
 
         /// <summary>
         ///   Initialisation du pomodoro : timer et chrono. 
@@ -50,6 +51,9 @@ namespace Pomodoro.Data
             StopWatch.Reset();
         }
 
+        /// <summary>
+        ///     Permet de récupérer l'index de la séquence
+        /// </summary>
         public int getIndexTabSeq()
         {
             return TabIndexSeq;
