@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace Pomodoro.Data
@@ -12,23 +9,24 @@ namespace Pomodoro.Data
         private Timer TimerPomodoro;
         private Stopwatch StopWatch;
         private double TimerPomodoroInMilliseconds;
+        private int TabIndexSeq = 0;
+        private int[] Sequence = new int[] { 1 , 5, 25, 5, 25, 5, 25, 15 };
 
+
+        /// <summary>
+        ///   Initialisation du pomodoro : timer et chrono. 
+        ///   L'index de la séquence débute à 0
+        /// </summary>
         public Pomodoro()
         {
-            // Initialisation du pomodoro : timer et chrono 
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
             StopWatch = new Stopwatch();
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            //CODE APPELE QUAND LE TEMPS EST ECOULE
-        }
-
         /// <summary>
-        /// Permet de démarrer le pomodoro 
+        ///   Permet de démarrer le pomodoro 
         /// </summary>
         public void StartPomodoro()
         {
@@ -37,7 +35,7 @@ namespace Pomodoro.Data
         }
 
         /// <summary>
-        /// Permet de mettre en pause le pomodoro
+        ///   Permet de mettre en pause le pomodoro
         /// </summary>
         public void StopPomodoro()
         {
@@ -46,17 +44,51 @@ namespace Pomodoro.Data
         }
 
         /// <summary>
-        /// Permet de remettre le pomodoro à son état initial
+        ///   Permet de remettre le pomodoro à son état initial
         /// </summary>
         public void ResetPomodoro()
         {
             StopWatch.Reset();
         }
-        
+
         /// <summary>
-        /// Calcul du temps écoulé
+        ///     Permet de récupérer l'index de la séquence
         /// </summary>
-        /// <returns>Temps écoulé en milliseconds</returns>
+        public int getIndexTabSeq()
+        {
+            return TabIndexSeq;
+        }
+
+        /// <summary>
+        ///   Evènement appelé quand le temps est écoulé
+        ///   On incrémente l'index de la séquence pour passer au pomodoro suivant
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            StopPomodoro();
+            ResetPomodoro();
+
+            if(TabIndexSeq < 8)
+            {
+                TabIndexSeq++;
+            } else
+            {
+                TabIndexSeq = 0;
+            }
+            
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
+            TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
+            StartPomodoro();
+        }
+
+        /// <summary>
+        ///   Calcul du temps écoulé
+        /// </summary>
+        /// <returns>
+        ///   Temps écoulé en milliseconds
+        /// </returns>
         public double TimeElapsed()
         {
             return TimerPomodoroInMilliseconds - StopWatch.ElapsedMilliseconds;
