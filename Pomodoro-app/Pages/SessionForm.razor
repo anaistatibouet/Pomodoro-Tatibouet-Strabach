@@ -11,17 +11,16 @@
 <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <h2 class="text-center font-weight-bold mt-5">Ajouter une session</h2>
+    <h2 class="text-center font-weight-bold m-5">Ajouter une session</h2>
     <div class="formSession m-auto" style="width:60vw">
         <div class="form-group">
-            <label>Nom du pomodoro</label>
             <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" 
                        @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNameForm(newValue)), 
                                    string.Empty))"/>
         </div>
 
         <div class="form-group">
-            <label>Nombre de pomodoros de la session</label>
+            <label>Nombre de pomodoros</label>
             <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" 
                        @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)), 
                                    string.Empty))"   />
@@ -29,9 +28,11 @@
         <button type="submit" class="btn btn-primary">Ajouter une session</button>
     </div>
 </EditForm>
-
 <div>
     <span id="resultJson"></span>
+</div>
+<div>
+    <img src="../images/kitten.png" alt="kitten" class="w-25"/>
 </div>
 
 @code {
