@@ -2,6 +2,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow: hidden;
 }
 
 a, .btn-link {
@@ -138,16 +139,26 @@ app {
     z-index: 1000;
 }
 
+.hourglass {
+    width: 100px;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 4vw;
+}
+
 .bgPomodoro {
     background-image: url("../images/cat.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    padding: 180px 20px;
+    height: 100vh;
 }
 
 .card {
     position: relative;
     left: 415px;
+    top: 150px;
+
 }
 
 #blazor-error-ui .dismiss {
