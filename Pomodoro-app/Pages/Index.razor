@@ -21,10 +21,13 @@
     </div>
 
 @code {
-    private Pomodoro currentPomodoro = new Pomodoro();
+    public Session currentSession = new Session(7);
+    //private Pomodoro currentPomodoro = new Pomodoro(0);
+    private dynamic currentPomodoro => currentSession.Sequence[currentSession.ActivePomodoro];
     private TimeSpan t { get; set; }
     private double timeElapsed { get; set; }
-    private int indexTab;
+    //private int indexTab;
+    private bool breakState;
     private string timeElapsedString { get; set;}
     private string pomodoroTitle;
     private string[] pomodoroState = new string[]{"Travail","Pause"};
@@ -96,13 +99,14 @@
 
     public void GetPomodoroString()
     {
-        indexTab = currentPomodoro.getIndexTabSeq();
+        //indexTab = currentPomodoro.getIndexTabSeq();
+        breakState = currentPomodoro.GetBreakState();
 
         if (lazyMode == false)
         {
             modeBtn = mode[1];
 
-            if ((indexTab % 2) == 0 )
+            if (!breakState)
             {
                 pomodoroTitle = pomodoroState[0];
             } else
@@ -113,7 +117,7 @@
         {
             modeBtn = mode[0];
 
-            if((indexTab % 2) == 0)
+            if(!breakState)
             {
                 pomodoroTitle = pomodoroState[1];
             } else

@@ -10,16 +10,28 @@ namespace Pomodoro.Data
         private Stopwatch StopWatch;
         private double TimerPomodoroInMilliseconds;
         private int TabIndexSeq = 0;
-        private int[] Sequence = new int[] { 1, 2, 1};
+
+        private Session Session { get; set; }
+        private int Position { get; set; }
+        private bool InBreak { get; set; }
+        //Etat de pause
+        //Si false : La durée est de 25 minutes
+        //Si true : La durée est de 5 minutes
+
+        //private int[] Sequence = new int[] { 1, 2, 1};
 
 
         /// <summary>
         ///   Initialisation du pomodoro : timer et chrono. 
         ///   L'index de la séquence débute à 0
         /// </summary>
-        public Pomodoro()
+        public Pomodoro(int position, Session session)
         {
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
+            this.Position = position;
+            this.InBreak = false;
+            this.Session = session; //Accès vers la session à laquelle il appartient.
+
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(1).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
             StopWatch = new Stopwatch();
@@ -60,27 +72,46 @@ namespace Pomodoro.Data
         }
 
         /// <summary>
+        /// Retourne l'état de "InBreak" en nb entier : false = 0, true = 1
+        /// </summary>
+        /// <returns></returns>
+        public bool GetBreakState()
+        {
+            return InBreak;
+        }
+
+        /// <summary>
         ///   Evènement appelé quand le temps est écoulé
-        ///   On incrémente l'index de la séquence pour passer au pomodoro suivant
+        ///   Si l'état "InBreak" était à 'false', on le passe à true et on redémarre le pomodoro à 5 ou 15 min.
+        ///   Si l'état "InBreak" était à 'true', on incrémente l'index de la séquence pour passer au pomodoro suivant
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            Debug.WriteLine("Reset Timer");
             StopPomodoro();
             ResetPomodoro();
 
-            if(TabIndexSeq < 4)
+            if(this.InBreak == false) //On redémarre avec la durée de la pause
             {
-                TabIndexSeq++;
-            } else
+                this.InBreak = true;
+                if (this.Position % 4 == 0) //Si le pomodoro est le 4ème, 8ème, 12ème, etc..., la pause est de 15min.
+                {
+                    TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(2).TotalMilliseconds;
+                } else
+                {
+                    TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(15).TotalMilliseconds;
+                }
+                TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
+                StartPomodoro();
+            } else //On réinitialise le pomodoro à 25 min sans le déclencher
             {
-                TabIndexSeq = 0;
+                this.InBreak = false;
+                TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+                TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
+                this.Session.SwitchActivePomodoro(); // On change le pomodoro actif dans la session
             }
-            
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(Sequence[TabIndexSeq]).TotalMilliseconds;
-            TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
-            StartPomodoro();
         }
 
         /// <summary>
