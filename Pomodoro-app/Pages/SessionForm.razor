@@ -1,0 +1,38 @@
+﻿@page "/SessionForm"
+@using System.Threading;
+@using Data;
+@using System;
+@using Model;
+
+    
+    <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <h2 class="text-center font-weight-bold mt-5">Ajouter une session</h2>
+        <div class="formSession m-auto" style="width:60vw">
+            <div class="form-group">
+                <label>Nom du pomodoro</label>
+                <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="truc" />
+            </div>
+
+            <div class="form-group">
+                <label>Nombre de pomodoros de la session</label>
+                <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter une session</button>
+        </div>
+    </EditForm>
+
+<div>
+    <span id="resultJson"></span>
+</div>
+
+@code {
+    private SessionModel _sessionModel = new SessionModel();
+
+    private void addSession()
+    {
+
+    }
+}
+
