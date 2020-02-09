@@ -3,25 +3,32 @@
 @using Data;
 @using System;
 @using Model;
+@inject IJSRuntime JSRuntime;
+@using System.Text.Json;
 
-    
-    <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <h2 class="text-center font-weight-bold mt-5">Ajouter une session</h2>
-        <div class="formSession m-auto" style="width:60vw">
-            <div class="form-group">
-                <label>Nom du pomodoro</label>
-                <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
-            </div>
 
-            <div class="form-group">
-                <label>Nombre de pomodoros de la session</label>
-                <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
-            </div>
-            <button type="submit" class="btn btn-primary">Ajouter une session</button>
+
+<EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <h2 class="text-center font-weight-bold mt-5">Ajouter une session</h2>
+    <div class="formSession m-auto" style="width:60vw">
+        <div class="form-group">
+            <label>Nom du pomodoro</label>
+            <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" 
+                       @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNameForm(newValue)), 
+                                   string.Empty))"/>
         </div>
-    </EditForm>
+
+        <div class="form-group">
+            <label>Nombre de pomodoros de la session</label>
+            <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" 
+                       @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)), 
+                                   string.Empty))"   />
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter une session</button>
+    </div>
+</EditForm>
 
 <div>
     <span id="resultJson"></span>
@@ -30,9 +37,35 @@
 @code {
     private SessionModel _sessionModel = new SessionModel();
 
-    private void addSession()
+    private async Task getNameForm(string currentValue)
     {
-
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            $"Current name is: {currentValue}"
+        );
     }
+
+    
+    private async Task getNbPomodoro(string currentValue)
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            $"Current nb pomodoro is: {currentValue}"
+        );
+    }
+
+
+    private async Task addSession()
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            JsonSerializer.Serialize(_sessionModel)
+        );
+    }
+
+
 }
 
