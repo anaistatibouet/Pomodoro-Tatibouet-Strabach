@@ -158,7 +158,6 @@ app {
     position: relative;
     left: 415px;
     top: 150px;
-
 }
 
 #blazor-error-ui .dismiss {
@@ -199,10 +198,6 @@ app {
         top: 0;
     }
 
-    /*.main > div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }*/
 
     .navbar-toggler {
         display: none;

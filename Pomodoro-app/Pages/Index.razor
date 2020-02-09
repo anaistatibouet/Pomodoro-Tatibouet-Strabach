@@ -7,26 +7,26 @@
         <div class="card text-center m-auto" style="width: 30vw;">
             <div class="card-header bg-dark text-light">
                 <h2>@pomodoroTitle</h2>
-                <div>
-                    <button class="btn btn-outline-light" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
-                </div>
+                <p class="mb-0">Pomodoro @ActivePomodoro</p>
             </div>
             <div class="card-body">
                 <h1 class="m-4">@timeElapsedString</h1>
                 <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
                 <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
                 <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
+                <hr />
+                <div class="mt-4">
+                    <button class="btn btn-outline-dark" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
+                </div>
             </div>
         </div>
     </div>
 
 @code {
     public Session currentSession = new Session(7);
-    //private Pomodoro currentPomodoro = new Pomodoro(0);
     private dynamic currentPomodoro => currentSession.Sequence[currentSession.ActivePomodoro];
     private TimeSpan t { get; set; }
     private double timeElapsed { get; set; }
-    //private int indexTab;
     private bool breakState;
     private string timeElapsedString { get; set;}
     private string pomodoroTitle;
@@ -34,7 +34,7 @@
     private string[] mode = new string[] { "mode studieux", "mode flemme" };
     private string startBtn = "Démarrer";
     private string modeBtn;
-
+    private int ActivePomodoro { get; set; }
     private bool lazyMode = false;
 
     public void Start()
@@ -63,6 +63,11 @@
         timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
     }
 
+    public int getActivePomodoro()
+    {
+        return this.ActivePomodoro = currentSession.ActivePomodoro + 1;
+    }
+
 
     /// <summary>
     /// Permet de rafraîchir le pomodoro lors de l'initialisation
@@ -73,6 +78,7 @@
         {
             TimeElapsed();
             GetPomodoroString();
+            getActivePomodoro();
 
             InvokeAsync(() =>
             {

@@ -85,7 +85,7 @@ namespace Pomodoro.Data
                 this.InBreak = true;
                 if (this.Position % 4 != 3) //Si le pomodoro est le 4ème, 8ème, 12ème, etc..., la pause est de 15min.
                 {
-                    TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+                    TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(5).TotalMilliseconds;
                 } else
                 {
                     TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(15).TotalMilliseconds;
