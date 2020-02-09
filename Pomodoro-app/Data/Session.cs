@@ -40,6 +40,7 @@ namespace Pomodoro.Data
             if (this.ActivePomodoro < Sequence.Count)
             {
                 this.ActivePomodoro += 1;
+                Sequence[ActivePomodoro].StartPomodoro();
                 //Todo : Démarrer le pomodoro suivant
             } else
             {
