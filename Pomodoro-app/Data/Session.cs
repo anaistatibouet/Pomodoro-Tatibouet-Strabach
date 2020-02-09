@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace Pomodoro.Data
 {
-    [Table("session")]
     public class Session
     {
-        [Column("ID")]
-        [Key]
-        public int ID { get; set; }
-
-        public virtual ICollection<Pomodoro> Pomodoros { get; set; }
+        
     }
 }
