@@ -8,7 +8,7 @@
             <div class="card-header bg-dark text-light">
                 <h2>@pomodoroTitle</h2>
                 <div>
-                    <button class="btn btn-outline-light" @onclick="startLazyMode"><span class="oi oi-s"></span>Mode flemme</button>
+                    <button class="btn btn-outline-light" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
                 </div>
             </div>
             <div class="card-body">
@@ -28,7 +28,10 @@
     private string timeElapsedString { get; set;}
     private string pomodoroTitle;
     private string[] pomodoroState = new string[]{"Travail","Pause"};
+    private string[] mode = new string[] { "mode studieux", "mode flemme" };
     private string startBtn = "Démarrer";
+    private string modeBtn;
+
     private bool lazyMode = false;
 
     public void Start()
@@ -66,7 +69,7 @@
         var timer = new Timer(new TimerCallback(_ =>
         {
             TimeElapsed();
-            GetPomodoroTitle();
+            GetPomodoroString();
 
             InvokeAsync(() =>
             {
@@ -80,29 +83,39 @@
     /// Pour les jours où on n'a pas du tout envie de travailler :)
     /// Pour Benjamin c'est tout le temps ! 
     /// </summary>
-    public void startLazyMode()
+    public void changeMode()
     {
-        lazyMode = true;
+        if (!lazyMode)
+        {
+            lazyMode = true;
+        } else
+        {
+            lazyMode = false;
+        }
     }
 
-    public void GetPomodoroTitle()
+    public void GetPomodoroString()
     {
         indexTab = currentPomodoro.getIndexTabSeq();
 
         if (lazyMode == false)
         {
+            modeBtn = mode[1];
+
             if ((indexTab % 2) == 0 )
             {
                 pomodoroTitle = pomodoroState[0];
             } else
             {
-               pomodoroTitle = pomodoroState[1];
+                pomodoroTitle = pomodoroState[1];
             }
         } else
         {
+            modeBtn = mode[0];
+
             if((indexTab % 2) == 0)
             {
-                 pomodoroTitle = pomodoroState[1];
+                pomodoroTitle = pomodoroState[1];
             } else
             {
                 pomodoroTitle = pomodoroState[0];
