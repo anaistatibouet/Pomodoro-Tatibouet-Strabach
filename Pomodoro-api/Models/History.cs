@@ -6,22 +6,16 @@ using System.Web;
 
 namespace Pomodoro_api.Models
 {
-    public class Pomodoro
+    public class History
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int Position { get; set; }
-
+        public DateTime Date { get; set; }
 
         [Required]
-        public int SessionId { get; set; }
-
-        public Session Session { get; set; }
-
-
-        public int? TagId { get; set; }
+        public int TagId { get; set; }
 
         public Tag Tag { get; set; }
     }

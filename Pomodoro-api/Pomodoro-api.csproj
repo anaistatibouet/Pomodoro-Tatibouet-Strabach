@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\HistoriesController.cs" />
     <Compile Include="Controllers\PomodoroesController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
@@ -107,7 +108,16 @@
     <Compile Include="Migrations\202001252233359_Add Tags.designer.cs">
       <DependentUpon>202001252233359_Add Tags.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002091419262_History.cs" />
+    <Compile Include="Migrations\202002091419262_History.designer.cs">
+      <DependentUpon>202002091419262_History.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002091422231_TagNullableInPomodoro.cs" />
+    <Compile Include="Migrations\202002091422231_TagNullableInPomodoro.designer.cs">
+      <DependentUpon>202002091422231_TagNullableInPomodoro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\History.cs" />
     <Compile Include="Models\Pomodoro.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Tag.cs" />
@@ -131,6 +141,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001252233359_Add Tags.resx">
       <DependentUpon>202001252233359_Add Tags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091419262_History.resx">
+      <DependentUpon>202002091419262_History.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091422231_TagNullableInPomodoro.resx">
+      <DependentUpon>202002091422231_TagNullableInPomodoro.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
