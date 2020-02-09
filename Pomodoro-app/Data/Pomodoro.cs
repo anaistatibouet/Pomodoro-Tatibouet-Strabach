@@ -10,7 +10,7 @@ namespace Pomodoro.Data
         private Stopwatch StopWatch;
         private double TimerPomodoroInMilliseconds;
         private int TabIndexSeq = 0;
-        private int[] Sequence = new int[] { 1, 1, 25, 5, 25, 5, 25, 15 };
+        private int[] Sequence = new int[] { 1, 2, 1};
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Pomodoro.Data
             StopPomodoro();
             ResetPomodoro();
 
-            if(TabIndexSeq < 8)
+            if(TabIndexSeq < 4)
             {
                 TabIndexSeq++;
             } else
