@@ -156,6 +156,7 @@ app {
     top: 100px;
     width: 18vw;
     left: 18vw;
+    z-index: -5;
 }
 
 #blazor-error-ui .dismiss {
