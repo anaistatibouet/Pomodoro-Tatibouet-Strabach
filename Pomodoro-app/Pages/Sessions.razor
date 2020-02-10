@@ -1,0 +1,201 @@
+﻿@page "/Sessions"
+@using Model;
+@using System.Text.Json;
+@inject IJSRuntime JSRuntime;
+
+<EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <h2 class="text-center font-weight-bold m-5">Ajouter une session</h2>
+    <div class="formSession m-auto" style="width:30vw">
+        <div class="form-group">
+            <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session"
+                       @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNameForm(newValue)),
+                                   string.Empty))" />
+        </div>
+
+        <div class="form-group">
+            <label>Nombre de pomodoros</label>
+            <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros"
+                         @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)),
+                                   string.Empty))" />
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter une session</button>
+    </div>
+</EditForm>
+<div>
+    <img src="../images/kitten.png" alt="kitten" class="kitten" />
+</div>
+<div>
+    <span id="resultJson"></span>
+</div>
+<div class="m-5">
+    <table class="table m-auto" style="width:80vw">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Nombre de pomodoros</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    1
+                </td>
+                <td>
+                    Projet C#
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    MSPR - Dev
+                </td>
+                <td>
+                    3
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3
+                </td>
+                <td>
+                    Projet C#
+                </td>
+                <td>
+                    6
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private SessionModel _sessionModel = new SessionModel();
+
+    private async Task getNameForm(string currentValue)
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            $"Current name is: {currentValue}"
+        );
+    }
+
+
+    private async Task getNbPomodoro(string currentValue)
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            $"Current nb pomodoro is: {currentValue}"
+        );
+    }
+
+
+    private async Task addSession()
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            JsonSerializer.Serialize(_sessionModel)
+        );
+    }
+
+
+}
+
