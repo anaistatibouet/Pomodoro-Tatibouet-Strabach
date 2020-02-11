@@ -139,7 +139,7 @@ app {
 }
 
 .bgPomodoro {
-    background-image: url("../images/cat.jpg");
+    background-image: url("../medias/images/cat.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     height: 92vh;

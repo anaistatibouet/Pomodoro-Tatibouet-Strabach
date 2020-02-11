@@ -26,7 +26,7 @@ namespace Pomodoro.Data
             this.InBreak = false;
             this.Session = session; //Accès vers la session à laquelle il appartient.
 
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(1).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
             TimerPomodoro.AutoReset = true;

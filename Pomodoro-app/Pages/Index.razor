@@ -18,6 +18,12 @@
                 <div class="mt-4">
                     <button class="btn btn-outline-dark" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
                 </div>
+                @if ((t.Seconds < 3) && (isStarted))
+                {
+                    <audio autoplay class="mt-5">
+                        <source src="../medias/sounds/sound-end.mp3" type="audio/mpeg">
+                    </audio>
+                }
             </div>
         </div>
     </div>
@@ -36,11 +42,13 @@
     private string modeBtn;
     private int ActivePomodoro { get; set; }
     private bool lazyMode = false;
+    private bool isStarted { get; set; }
 
     public void Start()
     {
         currentPomodoro.StartPomodoro();
         if (startBtn == "Redémarrer") { startBtn = "Démarrer"; }
+        isStarted = true;
     }
 
     public void Stop()
@@ -61,6 +69,7 @@
 
         // Affichage du pomodoro avec les minutes et les secondes
         timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
+
     }
 
     public int GetActivePomodoro()
@@ -68,14 +77,14 @@
         return this.ActivePomodoro = currentSession.ActivePomodoro + 1;
     }
 
-
     /// <summary>
     /// Permet de rafraîchir le pomodoro lors de l'initialisation
     /// </summary>
     protected override void OnInitialized()
     {
+        isStarted = false;
         var timer = new Timer(new TimerCallback(_ =>
-        {
+        {      
             TimeElapsed();
             GetPomodoroString();
             GetActivePomodoro();
@@ -105,7 +114,6 @@
 
     public void GetPomodoroString()
     {
-        //indexTab = currentPomodoro.getIndexTabSeq();
         breakState = currentPomodoro.GetBreakState();
 
         if (lazyMode == false)
@@ -131,7 +139,6 @@
                 pomodoroTitle = pomodoroState[0];
             }
         }
-
     }
 }
 
