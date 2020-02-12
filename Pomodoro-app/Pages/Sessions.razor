@@ -6,7 +6,9 @@
 <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <h2 class="text-center font-weight-bold m-5">Ajouter une session</h2>
+    <h2 class="text-center font-weight-bold m-5">
+       Sessions
+    </h2>
     <div class="formSession m-auto" style="width:30vw">
         <div class="form-group">
             <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session"
@@ -20,7 +22,7 @@
                          @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)),
                                    string.Empty))" />
         </div>
-        <button type="submit" class="btn btn-primary">Ajouter une session</button>
+        <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
     </div>
 </EditForm>
 <div>
@@ -49,6 +51,7 @@
                 </td>
                 <td>
                     5
+                    <a href="#" class="ml-2">Choisir tags</a>
                 </td>
                 <td>
                     <a href="#"><span class="oi oi-play-circle"></span></a>
@@ -63,6 +66,7 @@
                 </td>
                 <td>
                     3
+                    <a href="#" class="ml-2">Choisir tags</a>
                 </td>
                 <td>
                     <a href="#"><span class="oi oi-play-circle"></span></a>
@@ -77,6 +81,7 @@
                 </td>
                 <td>
                     6
+                    <a href="#" class="ml-2">Choisir tags</a>
                 </td>
                 <td>
                     <a href="#"><span class="oi oi-play-circle"></span></a>
@@ -91,101 +96,7 @@
                 </td>
                 <td>
                     5
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
+                    <a href="#" class="ml-2">Choisir tags</a>
                 </td>
                 <td>
                     <a href="#"><span class="oi oi-play-circle"></span></a>
