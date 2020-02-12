@@ -26,7 +26,7 @@ namespace Pomodoro.Data
             this.InBreak = false;
             this.Session = session; //Accès vers la session à laquelle il appartient.
 
-            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(1).TotalMilliseconds;
+            TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
             TimerPomodoro.AutoReset = true;
@@ -34,7 +34,7 @@ namespace Pomodoro.Data
         }
 
         /// <summary>
-        ///   Permet de démarrer le pomodoro 
+        ///   Permet de démarrer le pomodoro
         /// </summary>
         public void StartPomodoro()
         {
@@ -80,20 +80,22 @@ namespace Pomodoro.Data
             StopPomodoro();
             ResetPomodoro();
 
-            if(this.InBreak == false) //On redémarre avec la durée de la pause
+            if (this.InBreak == false) //On redémarre avec la durée de la pause
             {
                 this.InBreak = true;
                 if (this.Position % 4 != 3) //Si le pomodoro est le 4ème, 8ème, 12ème, etc..., la pause est de 15min.
                 {
                     TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(5).TotalMilliseconds;
-                } else
+                }
+                else
                 {
                     TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(15).TotalMilliseconds;
                 }
                 TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
                 TimerPomodoro.Elapsed += Timer_Elapsed;
                 StartPomodoro();
-            } else //On réinitialise le pomodoro à 25 min sans le déclencher
+            }
+            else //On réinitialise le pomodoro à 25 min sans le déclencher
             {
                 this.InBreak = false;
                 TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
@@ -113,7 +115,6 @@ namespace Pomodoro.Data
         public double TimeElapsed()
         {
             return TimerPomodoroInMilliseconds - StopWatch.ElapsedMilliseconds;
-            
         }
     }
 }

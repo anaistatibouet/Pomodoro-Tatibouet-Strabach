@@ -28,7 +28,7 @@ app {
 
 .main {
     flex: 1;
-    padding:0;
+    padding: 0;
 }
 
     .main .top-row {
@@ -42,10 +42,10 @@ app {
             margin-left: 1.5rem;
         }
 
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 .sidebar {
     background-color: #0b2d76;
@@ -98,9 +98,9 @@ app {
                 color: black;
             }
 
-            .sidebar-content{
-                margin-top: 1rem;
-            }
+.sidebar-content {
+    margin-top: 1rem;
+}
 
 .content {
     overflow: hidden;
@@ -159,9 +159,13 @@ app {
     z-index: -5;
 }
 
-.tag-container{
+.tag-container {
     background-color: #0b2d76;
     border-radius: 3px;
+}
+
+.tagBtn {
+    background-color: #0b2d76 !important;
 }
 
 #blazor-error-ui .dismiss {
@@ -201,7 +205,6 @@ app {
         position: sticky;
         top: 0;
     }
-
 
     .navbar-toggler {
         display: none;

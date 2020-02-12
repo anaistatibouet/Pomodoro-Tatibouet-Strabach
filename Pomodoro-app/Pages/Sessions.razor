@@ -1,36 +1,16 @@
 ﻿@page "/Sessions"
 @using Model;
 @using System.Text.Json;
-@inject IJSRuntime JSRuntime;
+@inject IModalService Modal
 
-<EditForm Model="@_sessionModel" OnValidSubmit="addSession">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <h2 class="text-center font-weight-bold m-5">
-       Sessions
-    </h2>
-    <div class="formSession m-auto" style="width:30vw">
-        <div class="form-group">
-            <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session"
-                       @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNameForm(newValue)),
-                                   string.Empty))" />
-        </div>
-
-        <div class="form-group">
-            <label>Nombre de pomodoros</label>
-            <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros"
-                         @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)),
-                                   string.Empty))" />
-        </div>
-        <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
-    </div>
-</EditForm>
+<SessionsForm></SessionsForm>
 <div>
     <img src="../medias/images/kitten.png" alt="kitten" class="kitten" />
 </div>
 <div>
     <span id="resultJson"></span>
 </div>
+
 <div class="m-5">
     <table class="table m-auto" style="width:60vw">
         <thead class="thead-dark">
@@ -51,10 +31,10 @@
                 </td>
                 <td>
                     5
-                    <a href="#" class="ml-2">Choisir tags</a>
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                 </td>
                 <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
                 </td>
             </tr>
             <tr>
@@ -66,10 +46,10 @@
                 </td>
                 <td>
                     3
-                    <a href="#" class="ml-2">Choisir tags</a>
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                 </td>
                 <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
                 </td>
             </tr>
             <tr>
@@ -81,10 +61,10 @@
                 </td>
                 <td>
                     6
-                    <a href="#" class="ml-2">Choisir tags</a>
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                 </td>
                 <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
                 </td>
             </tr>
             <tr>
@@ -96,46 +76,48 @@
                 </td>
                 <td>
                     5
-                    <a href="#" class="ml-2">Choisir tags</a>
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                 </td>
                 <td>
-                    <a href="#"><span class="oi oi-play-circle"></span></a>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 
+
+
 @code {
-    private SessionModel _sessionModel = new SessionModel();
 
-    private async Task getNameForm(string currentValue)
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    bool ShowModal { get; set; } = true;
+
+    void ShowModalTag()
     {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            $"Current name is: {currentValue}"
-        );
+        var parameters = new ModalParameters();
+        //parameters.Add("FormId", 11);
+
+        Modal.OnClose += ModalClosed;
+        Modal.Show<TagsModal>("Tags pomodoros", parameters);
+
     }
 
-
-    private async Task getNbPomodoro(string currentValue)
+    void ModalClosed(ModalResult modalResult)
     {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            $"Current nb pomodoro is: {currentValue}"
-        );
+        Console.WriteLine("Modal has closed");
+
+        if (modalResult.Cancelled)
+        {
+            Console.WriteLine("Modal was Cancelled");
+        }
+        else
+        {
+            Console.WriteLine(modalResult.Data.ToString());
+        }
+
+        Modal.OnClose -= ModalClosed;
     }
 
-
-    private async Task addSession()
-    {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            JsonSerializer.Serialize(_sessionModel)
-        );
-    }
 }
-

@@ -1,0 +1,35 @@
+﻿@page "/TagsForm"
+@using Model;
+@using System.Text.Json;
+@inject IJSRuntime JSRuntime;
+
+<EditForm Model="@_tagModel" OnValidSubmit="addTag">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Tags</h2>
+    <div class="formSession m-auto" style="width:30vw;">
+        <div class="form-group">
+            <InputText class="form-control" id="name" @bind-Value="_tagModel.Name" placeholder="Nom de la session" />
+        </div>
+        <button type="submit" class="btn btn-primary m-auto" style="display:block;">Ajouter</button>
+    </div>
+</EditForm>
+<div>
+    <img src="../medias/images/kitten-2.png" alt="kitten" class="kitten" />
+</div>
+<div>
+    <span id="resultJson"></span>
+</div>
+
+@code {
+    private TagModel _tagModel = new TagModel();
+
+    private async Task addTag()
+    {
+        await JSRuntime.InvokeVoidAsync(
+            "setElementById",
+            "resultJson",
+            JsonSerializer.Serialize(_tagModel)
+        );
+    }
+}

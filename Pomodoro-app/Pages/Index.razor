@@ -3,34 +3,34 @@
 @using Data;
 @using System;
 
-    <div class="bgPomodoro">
+<div class="bgPomodoro">
 
-        <div class="card text-center m-auto" style="width: 30vw;">
-            <div class="card-header bg-dark text-light">
-                <h2>@pomodoroTitle</h2>
-                <p class="mb-0">Pomodoro @ActivePomodoro</p>
+    <div class="card text-center m-auto" style="width: 30vw;">
+        <div class="card-header bg-dark text-light">
+            <h2>@pomodoroTitle</h2>
+            <p class="mb-0">Pomodoro @ActivePomodoro</p>
+        </div>
+        <div class="card-body">
+            <div class="p-2 text-white tag-container m-auto" style="width:20vw">
+                <p class="m-0">Projet DotNet</p>
             </div>
-            <div class="card-body">
-                <div class="p-2 text-white tag-container m-auto" style="width:20vw">
-                    <p class="m-0">Projet DotNet</p>
-                </div>
-                <h1 class="m-4">@timeElapsedString</h1>
-                <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
-                <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
-                <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
-                <hr />
-                <div class="mt-4">
-                    <button class="btn btn-outline-dark" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
-                </div>
-                @if ((t.Seconds < 3) && (isStarted))
-                {
-                    <audio autoplay class="mt-5">
-                        <source src="../medias/sounds/sound-end.mp3" type="audio/mpeg">
-                    </audio>
-                }
+            <h1 class="m-4">@timeElapsedString</h1>
+            <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
+            <button class="btn btn-danger actiontimer" @onclick="Stop"><span class="oi oi-media-pause"></span></button>
+            <button class="btn btn-warning actiontimer" @onclick="Reset"><span class="oi oi-action-undo"></span></button>
+            <hr />
+            <div class="mt-4">
+                <button class="btn btn-outline-dark" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
             </div>
+            @if ((t.Seconds < 3) && (isStarted))
+            {
+                <audio autoplay class="mt-5">
+                    <source src="../medias/sounds/sound-end.mp3" type="audio/mpeg">
+                </audio>
+            }
         </div>
     </div>
+</div>
 
 @code {
     public Session currentSession = new Session(7);
@@ -38,9 +38,9 @@
     private TimeSpan t { get; set; }
     private double timeElapsed { get; set; }
     private bool breakState;
-    private string timeElapsedString { get; set;}
+    private string timeElapsedString { get; set; }
     private string pomodoroTitle;
-    private string[] pomodoroState = new string[]{"Travail","Pause"};
+    private string[] pomodoroState = new string[] { "Travail", "Pause" };
     private string[] mode = new string[] { "mode studieux", "mode flemme" };
     private string startBtn = "Démarrer";
     private string modeBtn;
@@ -88,7 +88,7 @@
     {
         isStarted = false;
         var timer = new Timer(new TimerCallback(_ =>
-        {      
+        {
             TimeElapsed();
             GetPomodoroString();
             GetActivePomodoro();
@@ -103,14 +103,15 @@
 
     /// <summary>
     /// Pour les jours où on n'a pas du tout envie de travailler :)
-    /// Pour Benjamin c'est tout le temps ! 
+    /// Pour Benjamin c'est tout le temps !
     /// </summary>
     public void changeMode()
     {
         if (!lazyMode)
         {
             lazyMode = true;
-        } else
+        }
+        else
         {
             lazyMode = false;
         }
@@ -127,22 +128,24 @@
             if (!breakState)
             {
                 pomodoroTitle = pomodoroState[0];
-            } else
+            }
+            else
             {
                 pomodoroTitle = pomodoroState[1];
             }
-        } else
+        }
+        else
         {
             modeBtn = mode[0];
 
-            if(!breakState)
+            if (!breakState)
             {
                 pomodoroTitle = pomodoroState[1];
-            } else
+            }
+            else
             {
                 pomodoroTitle = pomodoroState[0];
             }
         }
     }
 }
-
