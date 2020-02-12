@@ -1,8 +1,7 @@
 ﻿namespace Pomodoro_api.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class TagNullableInPomodoro : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@
             CreateIndex("dbo.Pomodoroes", "TagId");
             AddForeignKey("dbo.Pomodoroes", "TagId", "dbo.Tags", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Pomodoroes", "TagId", "dbo.Tags");
