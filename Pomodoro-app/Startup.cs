@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Blazored.Modal;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Pomodoro.Data;
 
 namespace Pomodoro
 {
@@ -27,11 +20,9 @@ namespace Pomodoro
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("")
-            ));
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

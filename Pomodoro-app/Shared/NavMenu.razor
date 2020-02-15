@@ -8,18 +8,23 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-timer" aria-hidden="true"></span> Pomodoro
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-menu" aria-hidden="true"></span> Liste des sessions
+            <NavLink class="nav-link" href="Tags">
+                <span class="oi oi-tags" aria-hidden="true"></span> Tags
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Sessions">
+                <span class="oi oi-calendar" aria-hidden="true"></span> Sessions
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-dashboard" aria-hidden="true"></span> Récapitulatif sessions
+                <span class="oi oi-dashboard" aria-hidden="true"></span> Récapitulatif
             </NavLink>
         </li>
     </ul>

@@ -1,0 +1,123 @@
+﻿@page "/Sessions"
+@using Model;
+@using System.Text.Json;
+@inject IModalService Modal
+
+<SessionsForm></SessionsForm>
+<div>
+    <img src="../medias/images/kitten.png" alt="kitten" class="kitten" />
+</div>
+<div>
+    <span id="resultJson"></span>
+</div>
+
+<div class="m-5">
+    <table class="table m-auto" style="width:60vw">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Nombre de pomodoros</th>
+                <th scope="col">Démarrer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    1
+                </td>
+                <td>
+                    Projet C#
+                </td>
+                <td>
+                    5
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                </td>
+                <td>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    MSPR - Dev
+                </td>
+                <td>
+                    3
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                </td>
+                <td>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3
+                </td>
+                <td>
+                    Projet C#
+                </td>
+                <td>
+                    6
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                </td>
+                <td>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    Projet Pokémon
+                </td>
+                <td>
+                    5
+                   <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                </td>
+                <td>
+                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+@code {
+
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    bool ShowModal { get; set; } = true;
+
+    void ShowModalTag()
+    {
+        var parameters = new ModalParameters();
+        //parameters.Add("FormId", 11);
+
+        Modal.OnClose += ModalClosed;
+        Modal.Show<TagsModal>("Tags pomodoros", parameters);
+
+    }
+
+    void ModalClosed(ModalResult modalResult)
+    {
+        Console.WriteLine("Modal has closed");
+
+        if (modalResult.Cancelled)
+        {
+            Console.WriteLine("Modal was Cancelled");
+        }
+        else
+        {
+            Console.WriteLine(modalResult.Data.ToString());
+        }
+
+        Modal.OnClose -= ModalClosed;
+    }
+
+}

@@ -14,13 +14,14 @@ namespace Pomodoro_api.Models
         [Required]
         public int Position { get; set; }
 
+
         [Required]
         public int SessionId { get; set; }
 
         public Session Session { get; set; }
 
-        [Required]
-        public int TagId { get; set; }
+
+        public int? TagId { get; set; }
 
         public Tag Tag { get; set; }
     }

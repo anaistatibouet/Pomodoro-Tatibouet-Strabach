@@ -24,5 +24,7 @@ namespace Pomodoro_api.Data
         public System.Data.Entity.DbSet<Pomodoro_api.Models.Pomodoro> Pomodoroes { get; set; }
 
         public System.Data.Entity.DbSet<Pomodoro_api.Models.Tag> Tags { get; set; }
+
+        public System.Data.Entity.DbSet<Pomodoro_api.Models.History> Histories { get; set; }
     }
 }

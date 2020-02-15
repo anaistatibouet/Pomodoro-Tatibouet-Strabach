@@ -28,7 +28,7 @@ app {
 
 .main {
     flex: 1;
-    padding:0;
+    padding: 0;
 }
 
     .main .top-row {
@@ -42,10 +42,10 @@ app {
             margin-left: 1.5rem;
         }
 
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 .sidebar {
     background-color: #0b2d76;
@@ -98,13 +98,9 @@ app {
                 color: black;
             }
 
-            .sidebar-content{
-                margin-top: 1rem;
-            }
-
-            .opacitybg {
-                
-            }
+.sidebar-content {
+    margin-top: 1rem;
+}
 
 .content {
     overflow: hidden;
@@ -143,17 +139,34 @@ app {
 }
 
 .bgPomodoro {
-    background-image: url("../images/cat.jpg");
+    background-image: url("../medias/images/cat.jpg");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
-    padding: 180px 20px;
+    background-size: cover;
+    height: 92vh;
 }
 
 .card {
     position: relative;
     left: 415px;
+    top: 150px;
 }
 
+.kitten {
+    position: absolute;
+    top: 100px;
+    width: 18vw;
+    left: 18vw;
+    z-index: -5;
+}
+
+.tag-container {
+    background-color: #0b2d76;
+    border-radius: 3px;
+}
+
+.tagBtn {
+    background-color: #0b2d76 !important;
+}
 
 #blazor-error-ui .dismiss {
     cursor: pointer;
@@ -192,11 +205,6 @@ app {
         position: sticky;
         top: 0;
     }
-
-    /*.main > div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }*/
 
     .navbar-toggler {
         display: none;
