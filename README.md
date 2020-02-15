@@ -21,5 +21,6 @@ Todo : <br>
 ## Utilisation de l'api
 
 Url d'accès : "https://localhost:44313/" <br>
+Documentation : "https://app.swaggerhub.com/apis-docs/DotnetProject/PomodoroAPI/1.0.0" <br>
 
 Les différentes routes apparaissent en commentaire de chaque fonction dans les Controllers du projet "Pomodoro-api"
