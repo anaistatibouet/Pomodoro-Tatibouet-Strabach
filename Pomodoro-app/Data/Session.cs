@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Pomodoro.Data
 {
@@ -17,7 +12,7 @@ namespace Pomodoro.Data
         {
             this.InitSession(nbPomodoro);
         }
-        
+
         /// <summary>
         /// Initialisation de la session.
         /// Ajoute autant de pomodoro dans le tableau des Pomodoros, que le nombre passé en paramètre.
@@ -25,7 +20,7 @@ namespace Pomodoro.Data
         /// <param name="nbPomodoro"></param>
         public void InitSession(int nbPomodoro)
         {
-            for(int i = 0; i < nbPomodoro; i++)
+            for (int i = 0; i < nbPomodoro; i++)
             {
                 this.Sequence.Insert(i, new Pomodoro(i, this));
                 this.ActivePomodoro = 0;
@@ -42,12 +37,12 @@ namespace Pomodoro.Data
                 this.ActivePomodoro += 1;
                 Sequence[ActivePomodoro].StartPomodoro();
                 //Todo : Démarrer le pomodoro suivant
-            } else
+            }
+            else
             {
                 this.ActivePomodoro = 0;
                 //Stopper la session
             }
-            
         }
     }
 }

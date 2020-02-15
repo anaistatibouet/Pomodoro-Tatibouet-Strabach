@@ -1,0 +1,56 @@
+﻿@page "/TagsModal"
+@inject IModalService ModalService
+
+@if (ShowTagForm)
+{
+    <div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Pomodoro 1</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Choisir un tag</option>
+                <option value="dotnet">Projet C#</option>
+                <option value="vuejs">VueJS</option>
+                <option value="c">Langage C</option>
+            </select>
+        </div>
+
+        @*@foreach (var tag in tags)
+        {
+            <option value="">--Please choose an option--</option>
+            @<option value=@tag>@tag</option>@
+        }*@
+
+    </div>
+
+    <button @onclick="SubmitForm" class="btn btn-primary">Valider</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Annuler</button>
+}
+else
+{
+    <div class="alert alert-success" role="alert">
+        Success<br />
+        <button class="btn btn-primary" @onclick="@Done">Done</button>
+    </div>
+}
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+    bool ShowTagForm { get; set; } = true;
+
+    void SubmitForm()
+    {
+        ShowTagForm = false;
+    }
+
+    void Done()
+    {
+        ModalService.Close(ModalResult.Ok($"Tag Form was submitted successfully."));
+    }
+
+    void Cancel()
+    {
+        ModalService.Close(ModalResult.Cancel());
+    }
+}
