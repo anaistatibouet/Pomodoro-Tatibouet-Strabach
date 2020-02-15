@@ -1,6 +1,6 @@
 ﻿@page "/Tags"
+@using System.Net.Http
 @using Model;
-@using System.Text.Json;
 
 <TagsForm></TagsForm>
 <div class="m-5">
@@ -12,24 +12,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    1
-                </td>
-                <td>
-                    Pomodoro
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    2
-                </td>
-                <td>
-                    QR Code
-                </td>
-            </tr>
+            @foreach (TagModel item in TagsList)
+            {
+                <tr>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 
-@code{ }
+@code{
+
+    private List<TagModel> TagsList = new List<TagModel>();
+    HttpClient Http = new HttpClient();
+    
+    protected override async Task OnInitializedAsync() =>   
+        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+
+    protected override void OnInitialized()=>
+        TagsList.Add(new TagModel());
+
+}
+

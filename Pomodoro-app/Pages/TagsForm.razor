@@ -1,6 +1,6 @@
 ﻿@page "/TagsForm"
 @using Model;
-
+@using System.Net.Http;
 
 <EditForm Model="@_tagModel" OnValidSubmit="addTag">
     <DataAnnotationsValidator />
@@ -17,14 +17,44 @@
     <img src="../medias/images/kitten-2.png" alt="kitten" class="kitten" />
 </div>
 <div>
-    <span id="resultJson"></span>
+    <p class="@backgroundColor message">@StatusMessage</p>
 </div>
 
 @code {
     private TagModel _tagModel = new TagModel();
+    private HttpClient http = new HttpClient();
+    private string StatusMessage { get; set; }
+    private string backgroundColor { get; set; }
+    //private List<TagModel> TagsList = new List<TagModel>();
 
-    public void addTag()
+
+    private async void addTag()
     {
 
+
+        var Tag = new TagModel { Name = _tagModel.Name };
+        var ApiUri = "https://localhost:44313/api/Tags";
+        var res = await http.PostAsJsonAsync(ApiUri, Tag);
+
+        if (res.IsSuccessStatusCode)
+        {
+            backgroundColor = "bg-success";
+            StatusMessage = "Tag inséré dans la BDD";
+            StateHasChanged();
+        }
+        else
+        {
+            backgroundColor = "bg-danger";
+            StatusMessage = await res.Content.ReadAsStringAsync();
+            StateHasChanged();
+        }
     }
+
+    //protected override void OnInitialized()
+    //{
+    //    TagsList.Add(new TagModel());
+    //}
+
+
 }
+
