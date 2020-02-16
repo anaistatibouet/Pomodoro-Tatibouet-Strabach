@@ -14,6 +14,7 @@ namespace Pomodoro_api.Models
         [Required]
         public string Name { get; set; }
 
-
+        [Required]
+        public int NbPomodoros { get; set; }
     }
 }

@@ -81,6 +81,14 @@ namespace Pomodoro_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            for(int i = 0; i < session.NbPomodoros; i++)
+            {
+                var pomodoro = new Pomodoro();
+                pomodoro.Position = i;
+                pomodoro.Session = session;
+                db.Pomodoroes.Add(pomodoro);
+            }
+
             db.Sessions.Add(session);
             await db.SaveChangesAsync();
 
