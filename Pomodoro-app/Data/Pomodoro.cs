@@ -8,14 +8,11 @@ namespace Pomodoro.Data
     {
         private Timer TimerPomodoro;
         private Stopwatch StopWatch;
-        private double TimerPomodoroInMilliseconds;
-
         private Session Session { get; set; }
+
+        private double TimerPomodoroInMilliseconds;
         private int Position { get; set; }
         private bool InBreak { get; set; }
-        //Etat de pause
-        //Si false : La durée est de 25 minutes
-        //Si true : La durée est de 5 minutes
 
         /// <summary>
         ///   Initialisation du pomodoro : timer et chrono.
@@ -29,7 +26,6 @@ namespace Pomodoro.Data
             TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
             TimerPomodoro.Elapsed += Timer_Elapsed;
-            TimerPomodoro.AutoReset = true;
             StopWatch = new Stopwatch();
         }
 
