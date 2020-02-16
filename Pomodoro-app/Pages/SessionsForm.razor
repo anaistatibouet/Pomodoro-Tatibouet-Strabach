@@ -11,16 +11,12 @@
     </h2>
     <div class="formSession m-auto" style="width:30vw">
         <div class="form-group">
-            <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session"
-                       @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNameForm(newValue)),
-                                   string.Empty))" />
+            <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
         </div>
 
         <div class="form-group">
             <label>Nombre de pomodoros</label>
-            <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros"
-                         @oninput="@(EventCallback.Factory.CreateBinder<string>(this, newValue => Task.FromResult(getNbPomodoro(newValue)),
-                                   string.Empty))" />
+            <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
         </div>
         <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
     </div>
@@ -29,12 +25,15 @@
     <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
 </div>
 <div>
-    <span id="resultJson"></span>
+    <p class="@backgroundColor message">@StatusMessage</p>
 </div>
 
 @code {
 
     private SessionModel _sessionModel = new SessionModel();
+    private HttpClient http = new HttpClient();
+    private string StatusMessage { get; set; }
+    private string backgroundColor { get; set; }
 
     private async Task getNameForm(string currentValue)
     {
@@ -56,10 +55,21 @@
 
     private async Task addSession()
     {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            JsonSerializer.Serialize(_sessionModel)
-        );
+        var Session = new SessionModel { Name = _sessionModel.Name, NbPomodoros = _sessionModel.NbPomodoros };
+        var ApiUri = "https://localhost:44313/api/Sessions";
+        var res = await http.PostAsJsonAsync(ApiUri, Session);
+
+        if (res.IsSuccessStatusCode)
+        {
+            backgroundColor = "bg-success";
+            StatusMessage = "Session inséré dans la BDD";
+            StateHasChanged();
+        }
+        else
+        {
+            backgroundColor = "bg-danger";
+            StatusMessage = await res.Content.ReadAsStringAsync();
+            StateHasChanged();
+        }
     }
 }
