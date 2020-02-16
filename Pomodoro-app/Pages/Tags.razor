@@ -1,55 +1,155 @@
 ﻿@page "/Tags"
 @using System.Net.Http
 @using Model;
+@inject IToastService toastService;
 
-<TagsForm></TagsForm>
-<div class="m-5">
-    <table class="table m-auto" style="width:60vw; margin-top: 150px !important">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (TagsList.Count == 0)
-            {
+
+    <div class="m-5">
+        @if (insert)
+        {
+            <EditForm Model="@_tagModel" OnValidSubmit="addTag">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Ajout</h2>
+                <div class="formSession m-auto" style="width:30vw;">
+                    <div class="form-group">
+                        <InputText class="form-control" id="name" @bind-Value="_tagModel.Name" placeholder="@placeholder" />
+                    </div>
+                    <button type="submit" class="btn btn-primary m-auto" style="display:block;">Ajouter</button>
+                </div>
+            </EditForm>
+        }
+        else
+        {
+            <EditForm Model="@_tagModel">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Modifier</h2>
+                <div class="formSession m-auto" style="width:30vw;">
+                    <div class="form-group">
+                        <input class="form-control" id="name" @bind="_tagModel.Name" placeholder="_tagModel.Name" />
+                    </div>
+                    <button class="btn btn-primary m-auto" @onclick="@SaveTag">Modifier</button>
+                </div>
+            </EditForm>
+        }
+
+        <div>
+            <img src="../medias/images/kitten-2.png" alt="kitten" class="kitten" />
+        </div>
+
+        <table class="table m-auto" style="width:60vw; margin-top: 150px !important">
+            <thead class="thead-dark">
                 <tr>
-
-                    <td>@LoadingMessage</td>
-
+                    <th scope="col">Name</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            }
-            else
-            {
-                @foreach (TagModel item in TagsList)
+            </thead>
+            <tbody>
+                @if (TagsList.Count == 0)
                 {
                     <tr>
+
                         <td>
-                            @item.Id
-                        </td>
-                        <td>
-                            @item.Name
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border text-dark" role="status"></div>
+                                <p class="ml-3 mt-2">@LoadingMessage</p>
+                            </div>
                         </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
-</div>
+                else
+                {
+                    @foreach (TagModel item in TagsList)
+                    {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                <button class="btn btn-primary mr-3"><span class="oi oi-pencil"  @onclick="@(() => EditTag(@item.Id))"></span></button>
+                                <button class="btn btn-danger" @onclick="@(() => DeleteTag(@item.Id))"><span class="oi oi-trash text-white"></span></button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 
 @code{
 
+    private TagModel _tagModel = new TagModel();
     private List<TagModel> TagsList = new List<TagModel>();
     HttpClient Http = new HttpClient();
-    private string LoadingMessage = "Liste des tags en cours de chargement";
+
+    private string LoadingMessage = "Liste des tags en cours de chargement...";
+    private string StatusMessage { get; set; }
+    private string @backgroundColor { get; set; }
+    private bool insert = true;
+    private string placeholder = "Nom du tag";
+
+
+    // Requête POST pour ajouter un Tag
+    #region Adding
+    private async void addTag()
+    {
+
+        var Tag = new TagModel { Name = _tagModel.Name };
+        var RequestUri  = "https://localhost:44313/api/Tags";
+        var res = await Http.PostAsJsonAsync(RequestUri , Tag);
+
+        if (res.IsSuccessStatusCode)
+        {
+            StatusMessage = "Votre tag a bien été ajouté";
+            toastService.ShowSuccess(StatusMessage);
+            TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+            StateHasChanged();
+        }
+        else
+        {
+            StatusMessage = await res.Content.ReadAsStringAsync();
+            toastService.ShowError(StatusMessage);
+            StateHasChanged();
+        }
+
+    }
+    #endregion Inserting
 
     // Requête GET pour afficher les tags
+    #region Display
     protected override async Task OnInitializedAsync()
     {
-        var ApiUri = "https://localhost:44313/api/Tags";
-        TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUri);
+        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
     }
+    #endregion 
+
+    // Requête DELETE pour supprimer un tag
+    #region Removal
+    protected async Task DeleteTag(int TagId)
+    {
+        await Http.DeleteAsync($"https://localhost:44313/api/Tags/{TagId}");
+        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+    }
+    #endregion
+
+    // Requête PUT pour modifier un tag
+    #region Edition
+    private void EditTag(int id)
+    {
+        this.insert = false;
+        var editTag = TagsList.Single(i => i.Id == id);
+        _tagModel = new TagModel { Id = editTag.Id, Name = editTag.Name };
+    }
+
+    private async Task SaveTag()
+    {
+        await Http.PutJsonAsync($"https://localhost:44313/api/Tags/{_tagModel.Id}", _tagModel);
+        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+        this.insert = true;
+
+    }
+    #endregion
 
 }
 
