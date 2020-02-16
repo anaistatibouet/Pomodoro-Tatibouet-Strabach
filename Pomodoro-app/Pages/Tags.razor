@@ -8,20 +8,31 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Nom</th>
+                <th scope="col">Name</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (TagModel item in TagsList)
+            @if (TagsList.Count == 0)
             {
                 <tr>
-                    <td>
-                        @item.Id
-                    </td>
-                    <td>
-                        @item.Name
-                    </td>
+
+                    <td>@LoadingMessage</td>
+
                 </tr>
+            }
+            else
+            {
+                @foreach (TagModel item in TagsList)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
@@ -31,12 +42,14 @@
 
     private List<TagModel> TagsList = new List<TagModel>();
     HttpClient Http = new HttpClient();
-    
-    protected override async Task OnInitializedAsync() =>   
-        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+    private string LoadingMessage = "Liste des tags en cours de chargement";
 
-    protected override void OnInitialized()=>
-        TagsList.Add(new TagModel());
+    // Requête GET pour afficher les tags
+    protected override async Task OnInitializedAsync()
+    {
+        var ApiUri = "https://localhost:44313/api/Tags";
+        TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUri);
+    }
 
 }
 

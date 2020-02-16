@@ -24,13 +24,12 @@
     private TagModel _tagModel = new TagModel();
     private HttpClient http = new HttpClient();
     private string StatusMessage { get; set; }
-    private string backgroundColor { get; set; }
-    //private List<TagModel> TagsList = new List<TagModel>();
+    private string @backgroundColor { get; set; }
+    private List<TagModel> TagsList = new List<TagModel>();
 
-
+    // Requête POST pour ajouter un Tag
     private async void addTag()
     {
-
 
         var Tag = new TagModel { Name = _tagModel.Name };
         var ApiUri = "https://localhost:44313/api/Tags";
@@ -38,23 +37,16 @@
 
         if (res.IsSuccessStatusCode)
         {
-            backgroundColor = "bg-success";
             StatusMessage = "Tag inséré dans la BDD";
             StateHasChanged();
         }
         else
         {
-            backgroundColor = "bg-danger";
             StatusMessage = await res.Content.ReadAsStringAsync();
             StateHasChanged();
         }
+        
     }
-
-    //protected override void OnInitialized()
-    //{
-    //    TagsList.Add(new TagModel());
-    //}
-
 
 }
 

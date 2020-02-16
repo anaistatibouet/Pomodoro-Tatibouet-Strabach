@@ -1,4 +1,5 @@
 ﻿@page "/TagsModal"
+@using Model;
 @inject IModalService ModalService
 
 @if (ShowTagForm)
@@ -9,19 +10,13 @@
                 <label class="input-group-text" for="inputGroupSelect01">Pomodoro 1</label>
             </div>
             <select class="custom-select" id="inputGroupSelect01">
-                <option selected>Choisir un tag</option>
-                <option value="dotnet">Projet C#</option>
-                <option value="vuejs">VueJS</option>
-                <option value="c">Langage C</option>
+                <option value="">--please choose an option--</option>
+                @foreach (TagModel tag in TagsList)
+                {
+                    <option value=@tag.Name>@tag.Name</option>
+                }
             </select>
         </div>
-
-        @*@foreach (var tag in tags)
-        {
-            <option value="">--Please choose an option--</option>
-            @<option value=@tag>@tag</option>@
-        }*@
-
     </div>
 
     <button @onclick="SubmitForm" class="btn btn-primary">Valider</button>
@@ -38,6 +33,8 @@ else
 @code {
     [CascadingParameter] ModalParameters Parameters { get; set; }
     bool ShowTagForm { get; set; } = true;
+    private List<TagModel> TagsList = new List<TagModel>();
+    HttpClient Http = new HttpClient();
 
     void SubmitForm()
     {
@@ -53,4 +50,12 @@ else
     {
         ModalService.Close(ModalResult.Cancel());
     }
+
+    // Requête GET pour afficher les tags
+    protected override async Task OnInitializedAsync()
+    {
+        var ApiUri = "https://localhost:44313/api/Tags";
+        TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUri);
+    }
+
 }
