@@ -151,12 +151,21 @@ app {
     top: 150px;
 }
 
-.kitten {
+.kitten-left {
     position: absolute;
     top: 100px;
     width: 18vw;
     left: 18vw;
     z-index: -5;
+}
+
+.kitten-right {
+    position: absolute;
+    top: 100px;
+    width: 18vw;
+    right: 6vw;
+    z-index: -5;
+    
 }
 
 .tag-container {

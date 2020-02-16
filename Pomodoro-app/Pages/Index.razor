@@ -3,6 +3,7 @@
 @using Data;
 @using System;
 
+
 <div class="bgPomodoro">
 
     <div class="card text-center m-auto" style="width: 30vw;">
@@ -22,7 +23,7 @@
             <div class="mt-4">
                 <button class="btn btn-outline-dark" @onclick="changeMode"><span class="oi oi-s"></span>Choisir @modeBtn</button>
             </div>
-            @if ((t.Seconds < 3) && (isStarted))
+            @if ((t.Minutes == 0) && (t.Seconds < 3) && (isStarted))
             {
                 <audio autoplay class="mt-5">
                     <source src="../medias/sounds/sound-end.mp3" type="audio/mpeg">
@@ -33,122 +34,132 @@
 </div>
 
 @code {
+    #region Declarations
+    public Session currentSession = new Session(7);
+    private TimeSpan t { get; set; }
+    private dynamic currentPomodoro => currentSession.Sequence[currentSession.ActivePomodoro];
 
-    @code {
-        public Session currentSession = new Session(7);
-        private dynamic currentPomodoro => currentSession.Sequence[currentSession.ActivePomodoro];
-        private TimeSpan t { get; set; }
-        private double timeElapsed { get; set; }
-        private bool breakState;
-        private string timeElapsedString { get; set; }
-        private string pomodoroTitle;
-        private string[] pomodoroState = new string[] { "Travail", "Pause" };
-        private string[] mode = new string[] { "mode studieux", "mode flemme" };
-        private string startBtn = "Démarrer";
-        private string modeBtn;
-        private int ActivePomodoro { get; set; }
-        private bool lazyMode = false;
-        private bool isStarted { get; set; }
+    private int ActivePomodoro { get; set; }
+    private double timeElapsed { get; set; }
 
-        public void Start()
+    private string timeElapsedString { get; set; }
+    private string pomodoroTitle;
+    private string[] pomodoroState = new string[] { "Travail", "Pause" };
+    private string[] mode = new string[] { "mode studieux", "mode flemme" };
+    private string startBtn = "Démarrer";
+    private string modeBtn;
+
+    private bool lazyMode = false;
+    private bool isStarted { get; set; }
+    private bool breakState;
+    #endregion
+
+    #region Actions pomodoro
+    public void Start()
+    {
+        currentPomodoro.StartPomodoro();
+        if (startBtn == "Redémarrer") { startBtn = "Démarrer"; }
+        isStarted = true;
+    }
+
+    public void Stop()
+    {
+        currentPomodoro.StopPomodoro();
+        startBtn = "Redémarrer";
+    }
+
+    public void Reset()
+    {
+        currentPomodoro.ResetPomodoro();
+    }
+
+    /// <summary>
+    /// Pour les jours où on n'a pas du tout envie de travailler :)
+    /// </summary>
+    public void changeMode()
+    {
+        if (!lazyMode)
         {
-            currentPomodoro.StartPomodoro();
-            if (startBtn == "Redémarrer") { startBtn = "Démarrer"; }
-            isStarted = true;
+            lazyMode = true;
         }
-
-        public void Stop()
+        else
         {
-            currentPomodoro.StopPomodoro();
-            startBtn = "Redémarrer";
+            lazyMode = false;
         }
+    }
+    #endregion
 
-        public void Reset()
+    #region Display
+
+    public void TimeElapsed()
+    {
+        timeElapsed = currentPomodoro.TimeElapsed();
+        t = TimeSpan.FromMilliseconds(timeElapsed);
+
+        // Affichage du pomodoro avec les minutes et les secondes
+        timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
+
+        // TODO : Enregistrer une entrée dans l'historique (POST)
+
+    }
+
+    public int GetActivePomodoro()
+    {
+        return this.ActivePomodoro = currentSession.ActivePomodoro + 1;
+    }
+
+    public void GetPomodoroString()
+    {
+        breakState = currentPomodoro.GetBreakState();
+
+        if (lazyMode == false)
         {
-            currentPomodoro.ResetPomodoro();
-        }
+            modeBtn = mode[1];
 
-        public void TimeElapsed()
-        {
-            timeElapsed = currentPomodoro.TimeElapsed();
-            t = TimeSpan.FromMilliseconds(timeElapsed);
-
-            // Affichage du pomodoro avec les minutes et les secondes
-            timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
-
-        }
-
-        public int GetActivePomodoro()
-        {
-            return this.ActivePomodoro = currentSession.ActivePomodoro + 1;
-        }
-
-        /// <summary>
-        /// Permet de rafraîchir le pomodoro lors de l'initialisation
-        /// </summary>
-        protected override void OnInitialized()
-        {
-            isStarted = false;
-            var timer = new Timer(new TimerCallback(_ =>
+            if (!breakState)
             {
-                TimeElapsed();
-                GetPomodoroString();
-                GetActivePomodoro();
-
-                InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-
-            }), null, 1000, 1000);
-        }
-
-        /// <summary>
-        /// Pour les jours où on n'a pas du tout envie de travailler :)
-        /// Pour Benjamin c'est tout le temps !
-        /// </summary>
-        public void changeMode()
-        {
-            if (!lazyMode)
-            {
-                lazyMode = true;
+                pomodoroTitle = pomodoroState[0];
             }
             else
             {
-                lazyMode = false;
+                pomodoroTitle = pomodoroState[1];
             }
         }
-
-        public void GetPomodoroString()
+        else
         {
-            breakState = currentPomodoro.GetBreakState();
+            modeBtn = mode[0];
 
-            if (lazyMode == false)
+            if (!breakState)
             {
-                modeBtn = mode[1];
-
-                if (!breakState)
-                {
-                    pomodoroTitle = pomodoroState[0];
-                }
-                else
-                {
-                    pomodoroTitle = pomodoroState[1];
-                }
+                pomodoroTitle = pomodoroState[1];
             }
             else
             {
-                modeBtn = mode[0];
-
-                if (!breakState)
-                {
-                    pomodoroTitle = pomodoroState[1];
-                }
-                else
-                {
-                    pomodoroTitle = pomodoroState[0];
-                }
+                pomodoroTitle = pomodoroState[0];
             }
         }
     }
+    #endregion
+
+    #region Refresh pomodoro
+    /// <summary>
+    /// Permet de rafraîchir le pomodoro lors de l'initialisation
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        isStarted = false;
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            TimeElapsed();
+            GetPomodoroString();
+            GetActivePomodoro();
+
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+        }), null, 1000, 1000);
+    }
+    #endregion
 }
