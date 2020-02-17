@@ -51,11 +51,13 @@ else
         ModalService.Close(ModalResult.Cancel());
     }
 
-    // Requête GET pour afficher les tags
+    #region Display
+    // Requête GET pour afficher les tags et pour afficher les pomodoros
     protected override async Task OnInitializedAsync()
     {
-        var ApiUri = "https://localhost:44313/api/Tags";
-        TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUri);
+        var ApiUriTags = "https://localhost:44313/api/Tags";
+        var ApiUriPomodoros = "https://localhost:44313/api/Pomodoroes";
+        TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUriTags);
     }
-
+    #endregion
 }
