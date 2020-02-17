@@ -35,24 +35,6 @@
     private string StatusMessage { get; set; }
     private string backgroundColor { get; set; }
 
-    private async Task getNameForm(string currentValue)
-    {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            $"Current name is: {currentValue}"
-        );
-    }
-
-    private async Task getNbPomodoro(string currentValue)
-    {
-        await JSRuntime.InvokeVoidAsync(
-            "setElementById",
-            "resultJson",
-            $"Current nb pomodoro is: {currentValue}"
-        );
-    }
-
     private async Task addSession()
     {
         var Session = new SessionModel { Name = _sessionModel.Name, NbPomodoros = _sessionModel.NbPomodoros };

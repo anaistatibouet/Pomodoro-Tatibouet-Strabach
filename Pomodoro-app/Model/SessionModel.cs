@@ -6,6 +6,9 @@ namespace Pomodoro.Model
     public class SessionModel
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [StringLength(20, ErrorMessage = "Name is too long.")]
         public string Name { get; set; }
 
