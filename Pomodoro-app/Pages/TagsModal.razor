@@ -6,9 +6,12 @@
 {
     <div>
         <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Pomodoro 1</label>
-            </div>
+                @foreach (SessionModel pomodoro in PomodorosList)
+                {
+                <div class="input-group-prepend">
+                    <input class="input-group-text" id="id" @bind="_pomodoroModel.Id" placeholder="_pomodoroModel.Id" />
+                </div>
+                }
             <select class="custom-select" id="inputGroupSelect01">
                 <option value="">--please choose an option--</option>
                 @foreach (TagModel tag in TagsList)
@@ -34,6 +37,9 @@ else
     [CascadingParameter] ModalParameters Parameters { get; set; }
     bool ShowTagForm { get; set; } = true;
     private List<TagModel> TagsList = new List<TagModel>();
+    private List<SessionModel> PomodorosList = new List<SessionModel>();
+    private SessionModel _sessionModel = new SessionModel();
+    private PomodoroModel _pomodoroModel = new PomodoroModel();
     HttpClient Http = new HttpClient();
 
     void SubmitForm()
@@ -58,6 +64,8 @@ else
         var ApiUriTags = "https://localhost:44313/api/Tags";
         var ApiUriPomodoros = "https://localhost:44313/api/Pomodoroes";
         TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUriTags);
+        PomodorosList = await Http.GetJsonAsync<List<SessionModel>>(ApiUriPomodoros);
+
     }
     #endregion
 }
