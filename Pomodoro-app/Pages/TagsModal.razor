@@ -1,5 +1,6 @@
 ﻿@page "/TagsModal"
 @using Model;
+@using System.Diagnostics;
 @inject IModalService ModalService
 
 @if (ShowTagForm)
@@ -9,8 +10,10 @@
             @foreach (PomodoroModel pomodoro in PomodorosList)
             {
                 <div>
-                    <p>@pomodoro.Id</p>
+                    <label>Pomodoro @(pomodoro.Position +1)</label>
+                    @*<input type="hidden" value="" />*@
                 </div>
+                
                 <select class="custom-select" id="inputGroupSelect01">
                     <option value="">--please choose an option--</option>
                     @foreach (TagModel tag in TagsList)
@@ -41,6 +44,7 @@ else
     private SessionModel _sessionModel = new SessionModel();
     private PomodoroModel _pomodoroModel = new PomodoroModel();
     HttpClient Http = new HttpClient();
+    int SessionId { get; set; }
 
     void SubmitForm()
     {
@@ -57,12 +61,15 @@ else
         ModalService.Close(ModalResult.Cancel());
     }
 
+
     #region Display
     // Requête GET pour afficher les tags et pour afficher les pomodoros
     protected override async Task OnInitializedAsync()
     {
+        SessionId = Parameters.Get<int>("SessionId");
+
         var ApiUriTags = "https://localhost:44313/api/Tags";
-        var ApiUriPomodoros = "https://localhost:44313/api/Pomodoroes";
+        var ApiUriPomodoros = $"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes";
         TagsList = await Http.GetJsonAsync<List<TagModel>>(ApiUriTags);
         PomodorosList = await Http.GetJsonAsync<List<PomodoroModel>>(ApiUriPomodoros);
 

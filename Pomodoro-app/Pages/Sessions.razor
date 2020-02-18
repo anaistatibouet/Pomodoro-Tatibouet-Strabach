@@ -1,6 +1,7 @@
 ﻿@page "/Sessions"
 @using Model;
-@using System.Text.Json;
+@using System.Diagnostics;
+
 @inject IModalService Modal;
 @inject IToastService toastService;
 
@@ -94,7 +95,7 @@
                         </td>
                         <td>
                             @item.NbPomodoros
-                            <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                            <button  @onclick="@(() => ShowModalTag(@item.Id))" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                         </td>
                         <td>
                             <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
@@ -185,10 +186,12 @@
     }
     #endregion
 
-    void ShowModalTag()
+    void ShowModalTag(int Id)
     {
         var parameters = new ModalParameters();
-        //parameters.Add("FormId", 11);
+        parameters.Add("SessionId", Id);
+
+        Debug.WriteLine(Id);
 
         Modal.OnClose += ModalClosed;
         Modal.Show<TagsModal>("Tags pomodoros", parameters);
