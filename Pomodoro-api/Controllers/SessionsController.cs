@@ -14,17 +14,20 @@ using Pomodoro_api.Models;
 
 namespace Pomodoro_api.Controllers
 {
+    [RoutePrefix("api/Sessions")]
     public class SessionsController : ApiController
     {
         private PomodoroApiContext db = new PomodoroApiContext();
 
         // GET: api/Sessions
+        [Route("")]
         public IQueryable<Session> GetSessions()
         {
             return db.Sessions;
         }
 
         // GET: api/Sessions/5
+        [Route("{id:int}")]
         [ResponseType(typeof(Session))]
         public async Task<IHttpActionResult> GetSession(int id)
         {
@@ -36,6 +39,18 @@ namespace Pomodoro_api.Controllers
 
             return Ok(session);
         }
+
+        // GET: api/Sessions/5/Pomodoroes
+        [Route("{id:int}/Pomodoroes")]
+        [ResponseType(typeof(Pomodoro))]
+        public List<Pomodoro> GetPomodoroesBySession(int id)
+        {
+            List<Pomodoro> pomodoroes = new List<Pomodoro>();
+            pomodoroes = (from pom in db.Pomodoroes where pom.SessionId == id select pom).ToList();
+
+            return pomodoroes;
+        }
+
 
         // PUT: api/Sessions/5
         [ResponseType(typeof(void))]
