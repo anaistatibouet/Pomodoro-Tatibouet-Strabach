@@ -4,104 +4,104 @@
 @inject IModalService Modal;
 @inject IToastService toastService;
 
-    <div class="m-5">
-       @if (Insert)
-        {
-            <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <h2 class="text-center font-weight-bold m-5">
-                    Sessions
-                </h2>
-                <div class="formSession m-auto" style="width:30vw">
-                    <div class="form-group">
-                        <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nombre de pomodoros</label>
-                        <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
-                    </div>
-                    <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
+<div class="m-5">
+    @if (Insert)
+    {
+        <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5">
+                Sessions
+            </h2>
+            <div class="formSession m-auto" style="width:30vw">
+                <div class="form-group">
+                    <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
                 </div>
-            </EditForm>
-        }
-        else
-        {
-            <EditForm Model="@_sessionModel">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <h2 class="text-center font-weight-bold m-5">
-                    Sessions
-                </h2>
-                <div class="formSession m-auto" style="width:30vw">
-                    <div class="form-group">
-                        <input class="form-control" id="name" @bind="_sessionModel.Name" placeholder="_sessionModel.Name" />
-                    </div>
 
-                    <div class="form-group">
-                        <label>Nombre de pomodoros</label>
-                        <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" placeholder="_sessionModel.NbPomodoros" />
-                    </div>
-                    <button class="btn btn-primary m-auto" @onclick="@SaveSession">Modifier</button>
+                <div class="form-group">
+                    <label>Nombre de pomodoros</label>
+                    <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
                 </div>
-            </EditForm>
-        }
+                <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <EditForm Model="@_sessionModel">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5">
+                Sessions
+            </h2>
+            <div class="formSession m-auto" style="width:30vw">
+                <div class="form-group">
+                    <input class="form-control" id="name" @bind="_sessionModel.Name" name="_sessionModel.Name" />
+                </div>
 
-        <div>
-            <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
-        </div>
-        <table class="table m-auto" style="width:60vw">
-            <thead class="thead-dark">
+                <div class="form-group">
+                    <label>Nombre de pomodoros</label>
+                    <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" name="_sessionModel.NbPomodoros" />
+                </div>
+                <button class="btn btn-primary m-auto" @onclick="@SaveSession">Modifier</button>
+            </div>
+        </EditForm>
+    }
+
+    <div>
+        <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
+    </div>
+    <table class="table m-auto" style="width:60vw; margin-top: 30px !important">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Nombre de pomodoros</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Démarrer</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (SessionsList.Count == 0)
+            {
                 <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Nombre de pomodoros</th>
-                    <th scope="col">Actions</th>
-                    <th scope="col">Démarrer</th>
+
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-dark" role="status"></div>
+                            <p class="ml-3 mt-2">@LoadingMessage</p>
+                        </div>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @if (SessionsList.Count == 0)
+            }
+            else
+            {
+                @foreach (SessionModel item in SessionsList)
                 {
                     <tr>
-
                         <td>
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border text-dark" role="status"></div>
-                                <p class="ml-3 mt-2">@LoadingMessage</p>
-                            </div>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.NbPomodoros
+                            <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
+                            <button class="btn btn-danger" @onclick="@(() => DeleteSession(@item.Id))"><span class="oi oi-trash text-white"></span></button>
+                        </td>
+                        <td>
+                            <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
                         </td>
                     </tr>
                 }
-                else
-                {
-                    @foreach (SessionModel item in SessionsList)
-                    {
-                        <tr>
-                            <td>
-                                @item.Id
-                            </td>
-                            <td>
-                                @item.Name
-                            </td>
-                            <td>
-                                @item.NbPomodoros
-                                <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
-                                <button class="btn btn-danger" @onclick="@(() => DeleteSession(@item.Id))"><span class="oi oi-trash text-white"></span></button>
-                            </td>
-                            <td>
-                                <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code {
 

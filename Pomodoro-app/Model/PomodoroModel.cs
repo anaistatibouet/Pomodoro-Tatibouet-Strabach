@@ -8,7 +8,6 @@ namespace Pomodoro.Model
 {
     public class PomodoroModel
     {
-
         [Required]
         public int Id { get; set; }
 

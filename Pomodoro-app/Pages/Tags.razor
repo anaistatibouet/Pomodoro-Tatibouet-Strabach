@@ -26,7 +26,7 @@
                 <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Modifier</h2>
                 <div class="formSession m-auto" style="width:30vw;">
                     <div class="form-group">
-                        <input class="form-control" id="name" @bind="_tagModel.Name" placeholder="_tagModel.Name" />
+                        <input class="form-control" id="name" @bind="_tagModel.Name" name="_tagModel.Name" />
                     </div>
                     <button class="btn btn-primary m-auto" @onclick="@SaveTag">Modifier</button>
                 </div>
