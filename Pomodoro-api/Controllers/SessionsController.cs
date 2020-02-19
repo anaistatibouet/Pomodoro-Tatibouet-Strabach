@@ -20,14 +20,16 @@ namespace Pomodoro_api.Controllers
         private PomodoroApiContext db = new PomodoroApiContext();
 
         // GET: api/Sessions
-        [Route("")]
+        [Route("", Name ="GetSessions")]
+        [HttpGet]
         public IQueryable<Session> GetSessions()
         {
             return db.Sessions;
         }
 
         // GET: api/Sessions/5
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = "GetSessionById")]
+        [HttpGet]
         [ResponseType(typeof(Session))]
         public async Task<IHttpActionResult> GetSession(int id)
         {
@@ -41,7 +43,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // GET: api/Sessions/5/Pomodoroes
-        [Route("{id:int}/Pomodoroes")]
+        [Route("{id:int}/Pomodoroes", Name = "GetPomodoroesBySession")]
+        [HttpGet]
         [ResponseType(typeof(Pomodoro))]
         public List<Pomodoro> GetPomodoroesBySession(int id)
         {
@@ -53,6 +56,8 @@ namespace Pomodoro_api.Controllers
 
 
         // PUT: api/Sessions/5
+        [Route("{id:int}", Name = "PutSession")]
+        [HttpPut]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutSession(int id, Session session)
         {
@@ -88,6 +93,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // POST: api/Sessions
+        [Route("", Name = "PostSession")]
+        [HttpPost]
         [ResponseType(typeof(Session))]
         public async Task<IHttpActionResult> PostSession(Session session)
         {
@@ -107,10 +114,12 @@ namespace Pomodoro_api.Controllers
             db.Sessions.Add(session);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = session.Id }, session);
+            return CreatedAtRoute("GetSessionById", new { id = session.Id }, session);
         }
 
         // DELETE: api/Sessions/5
+        [Route("{id:int}", Name = "DeleteSession")]
+        [HttpDelete]
         [ResponseType(typeof(Session))]
         public async Task<IHttpActionResult> DeleteSession(int id)
         {

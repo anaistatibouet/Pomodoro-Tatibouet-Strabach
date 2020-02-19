@@ -37,21 +37,6 @@ namespace Pomodoro_api.Controllers
             return Ok(pomodoro);
         }
 
-        // GET: api/PomodoroesBySession/5
-        [HttpGet]
-        [ResponseType(typeof(Pomodoro))]
-        public async Task<IHttpActionResult> GetPomodoroesBySession(int idSession)
-        {
-            List<Pomodoro> pomodoroes = new List<Pomodoro>();
-            pomodoroes.Add(await db.Pomodoroes.FindAsync(idSession));
-            if (pomodoroes == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(pomodoroes);
-        }
-
         // PUT: api/Pomodoroes/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPomodoro(int id, Pomodoro pomodoro)
