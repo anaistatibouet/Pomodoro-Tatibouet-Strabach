@@ -14,17 +14,22 @@ using Pomodoro_api.Models;
 
 namespace Pomodoro_api.Controllers
 {
+    [RoutePrefix("api/Tags")]
     public class TagsController : ApiController
     {
         private PomodoroApiContext db = new PomodoroApiContext();
 
         // GET: api/Tags
+        [Route("", Name = "GetTags")]
+        [HttpGet]
         public IQueryable<Tag> GetTags()
         {
             return db.Tags;
         }
 
         // GET: api/Tags/5
+        [Route("{id:int}", Name = "GetTagById")]
+        [HttpGet]
         [ResponseType(typeof(Tag))]
         public async Task<IHttpActionResult> GetTag(int id)
         {
@@ -38,6 +43,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // PUT: api/Tags/5
+        [Route("{id:int}", Name = "PutTag")]
+        [HttpPut]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutTag(int id, Tag tag)
         {
@@ -73,6 +80,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // POST: api/Tags
+        [Route("", Name = "PostTag")]
+        [HttpPost]
         [ResponseType(typeof(Tag))]
         public async Task<IHttpActionResult> PostTag(Tag tag)
         {
@@ -84,10 +93,12 @@ namespace Pomodoro_api.Controllers
             db.Tags.Add(tag);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = tag.Id }, tag);
+            return CreatedAtRoute("GetTagById", new { id = tag.Id }, tag);
         }
 
         // DELETE: api/Tags/5
+        [Route("{id:int}", Name = "DeleteTag")]
+        [HttpDelete]
         [ResponseType(typeof(Tag))]
         public async Task<IHttpActionResult> DeleteTag(int id)
         {
