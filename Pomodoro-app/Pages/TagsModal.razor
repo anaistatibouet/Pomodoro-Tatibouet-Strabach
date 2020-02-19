@@ -6,27 +6,29 @@
 @if (ShowTagForm)
 {
     <div>
-        <div>
+        <div class="d-inline-block" style="max-height: 50vh; overflow-y:scroll !important;">
             @foreach (PomodoroModel pomodoro in PomodorosList)
             {
-                <div>
-                    <label>Pomodoro @(pomodoro.Position +1)</label>
-                    @*<input type="hidden" value="" />*@
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Pomodoro @(pomodoro.Position + 1)</label>
+                    </div>
+
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option value="">--please choose an option--</option>
+                        @foreach (TagModel tag in TagsList)
+                        {
+                            <option value=@tag.Id>@tag.Name</option>
+                        }
+                    </select>
                 </div>
-                
-                <select class="custom-select" id="inputGroupSelect01">
-                    <option value="">--please choose an option--</option>
-                    @foreach (TagModel tag in TagsList)
-                    {
-                        <option value=@tag.Name>@tag.Name</option>
-                    }
-                </select>
             }
         </div>
     </div>
-
-    <button @onclick="SubmitForm" class="btn btn-primary">Valider</button>
-    <button @onclick="Cancel" class="btn btn-secondary">Annuler</button>
+    <div class="mt-3">
+        <button @onclick="SubmitForm" class="btn btn-primary">Valider</button>
+        <button @onclick="Cancel" class="btn btn-secondary">Annuler</button>
+    </div>
 }
 else
 {
