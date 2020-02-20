@@ -14,17 +14,22 @@ using Pomodoro_api.Models;
 
 namespace Pomodoro_api.Controllers
 {
+    [RoutePrefix("api/Pomodoroes")]
     public class PomodoroesController : ApiController
     {
         private PomodoroApiContext db = new PomodoroApiContext();
 
         // GET: api/Pomodoroes
+        [Route("", Name = "GetPomodoroes")]
+        [HttpGet]
         public IQueryable<Pomodoro> GetPomodoroes()
         {
             return db.Pomodoroes;
         }
 
         // GET: api/Pomodoroes/5
+        [Route("{id:int}", Name = "GetPomodoroById")]
+        [HttpGet]
         [ResponseType(typeof(Pomodoro))]
         public async Task<IHttpActionResult> GetPomodoro(int id)
         {
@@ -38,6 +43,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // PUT: api/Pomodoroes/5
+        [Route("{id:int}", Name = "PutPomodoro")]
+        [HttpPut]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPomodoro(int id, Pomodoro pomodoro)
         {
@@ -73,6 +80,8 @@ namespace Pomodoro_api.Controllers
         }
 
         // POST: api/Pomodoroes
+        [Route("", Name = "PostPomodoro")]
+        [HttpPost]
         [ResponseType(typeof(Pomodoro))]
         public async Task<IHttpActionResult> PostPomodoro(Pomodoro pomodoro)
         {
@@ -84,10 +93,12 @@ namespace Pomodoro_api.Controllers
             db.Pomodoroes.Add(pomodoro);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = pomodoro.Id }, pomodoro);
+            return CreatedAtRoute("GetPomodoroById", new { id = pomodoro.Id }, pomodoro);
         }
 
         // DELETE: api/Pomodoroes/5
+        [Route("{id:int}", Name = "DeletePomodoro")]
+        [HttpDelete]
         [ResponseType(typeof(Pomodoro))]
         public async Task<IHttpActionResult> DeletePomodoro(int id)
         {

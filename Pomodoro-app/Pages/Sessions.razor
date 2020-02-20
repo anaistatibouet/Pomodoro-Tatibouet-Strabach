@@ -1,87 +1,105 @@
 ﻿@page "/Sessions"
 @using Model;
-@using System.Text.Json;
-@inject IModalService Modal
+@using System.Diagnostics;
 
-<SessionsForm></SessionsForm>
-<div>
-    <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
-</div>
-<div>
-    <span id="resultJson"></span>
-</div>
+@inject IModalService Modal;
+@inject IToastService toastService;
 
 <div class="m-5">
-    <table class="table m-auto" style="width:60vw">
+    @if (Insert)
+    {
+        <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5">
+                Sessions
+            </h2>
+            <div class="formSession m-auto" style="width:30vw">
+                <div class="form-group">
+                    <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre de pomodoros</label>
+                    <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
+                </div>
+                <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <EditForm Model="@_sessionModel">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5">
+                Sessions
+            </h2>
+            <div class="formSession m-auto" style="width:30vw">
+                <div class="form-group">
+                    <input class="form-control" id="name" @bind="_sessionModel.Name" name="_sessionModel.Name" />
+                </div>
+
+                @*<div class="form-group">
+                        <label>Nombre de pomodoros</label>
+                        <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" name="_sessionModel.NbPomodoros" />
+                    </div>*@
+                <button class="btn btn-primary m-auto" @onclick="@SaveSession">Modifier</button>
+            </div>
+        </EditForm>
+    }
+
+    <div>
+        <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
+    </div>
+    <table class="table m-auto" style="width:60vw; margin-top: 30px !important">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Nombre de pomodoros</th>
+                <th scope="col">Actions</th>
                 <th scope="col">Démarrer</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    1
-                </td>
-                <td>
-                    Projet C#
-                </td>
-                <td>
-                    5
-                    <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    2
-                </td>
-                <td>
-                    MSPR - Dev
-                </td>
-                <td>
-                    3
-                    <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    3
-                </td>
-                <td>
-                    Projet C#
-                </td>
-                <td>
-                    6
-                    <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    4
-                </td>
-                <td>
-                    Projet Pokémon
-                </td>
-                <td>
-                    5
-                    <button @onclick="ShowModalTag" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
-                </td>
-                <td>
-                    <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
-                </td>
-            </tr>
+            @if (SessionsList.Count == 0)
+            {
+                <tr>
+
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-dark" role="status"></div>
+                            <p class="ml-3 mt-2">@LoadingMessage</p>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (SessionModel item in SessionsList)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.NbPomodoros
+                            <button @onclick="@(() => ShowModalTag(@item.Id))" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
+                            <button class="btn btn-danger" @onclick="@(() => DeleteSession(@item.Id))"><span class="oi oi-trash text-white"></span></button>
+                        </td>
+                        <td>
+                            <a href="#"><span class="oi oi-play-circle text-success" style="font-size:25px !important"></span></a>
+                        </td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 </div>
@@ -90,13 +108,81 @@
 
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
+    private SessionModel _sessionModel = new SessionModel();
+    private List<SessionModel> SessionsList = new List<SessionModel>();
+    HttpClient Http = new HttpClient();
+
     bool ShowModal { get; set; } = true;
 
-    void ShowModalTag()
+    private string LoadingMessage = "Liste des sessions en cours de chargement...";
+    private string StatusMessage { get; set; }
+    private string Placeholder = "Nom de la session";
+
+    private bool Insert = true;
+    private bool ConfirmDelete { get; set; }
+
+    // Requête POST pour ajouter une session
+    #region Adding
+    private async Task addSession()
+    {
+        var Session = new SessionModel { Name = _sessionModel.Name, NbPomodoros = _sessionModel.NbPomodoros };
+        var ApiUri = "https://localhost:44313/api/Sessions";
+        var res = await Http.PostAsJsonAsync(ApiUri, Session);
+
+        if (res.IsSuccessStatusCode)
+        {
+            StatusMessage = "La session a bien été crée";
+            toastService.ShowSuccess(StatusMessage);
+            SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
+            StateHasChanged();
+        }
+        else
+        {
+            StatusMessage = await res.Content.ReadAsStringAsync();
+            toastService.ShowError(StatusMessage);
+            StateHasChanged();
+        }
+    }
+    #endregion
+
+    // Requête GET pour afficher les sessions
+    #region Display
+    protected override async Task OnInitializedAsync()
+    {
+        SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
+    }
+    #endregion
+
+    // Requête DELETE pour supprimer une session
+    #region Removal
+    protected async Task DeleteSession(int SessionId)
+    {
+        await Http.DeleteAsync($"https://localhost:44313/api/Sessions/{SessionId}");
+        SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
+    }
+    #endregion
+
+    // Requête PUT pour modifier une session
+    #region Edition
+    private void EditSession(int id)
+    {
+        this.Insert = false;
+        var editSession = SessionsList.Single(i => i.Id == id);
+        _sessionModel = new SessionModel { Id = editSession.Id, Name = editSession.Name, NbPomodoros = editSession.NbPomodoros };
+    }
+
+    private async Task SaveSession()
+    {
+        await Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{_sessionModel.Id}", _sessionModel);
+        SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
+        this.Insert = true;
+    }
+    #endregion
+
+    void ShowModalTag(int Id)
     {
         var parameters = new ModalParameters();
-        //parameters.Add("FormId", 11);
-
+        parameters.Add("SessionId", Id);
         Modal.OnClose += ModalClosed;
         Modal.Show<TagsModal>("Tags pomodoros", parameters);
 
