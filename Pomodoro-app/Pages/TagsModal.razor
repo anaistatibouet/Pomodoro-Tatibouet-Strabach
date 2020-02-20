@@ -33,8 +33,8 @@
 else
 {
     <div class="alert alert-success" role="alert">
-        Success<br />
-        <button class="btn btn-primary" @onclick="@Done">Done</button>
+        Les tags ont bien été associés au pomodoros de la session<br />
+        <button class="btn btn-primary" @onclick="@Done">Fermer</button>
     </div>
 }
 
@@ -48,19 +48,17 @@ else
     HttpClient Http = new HttpClient();
     int SessionId { get; set; }
 
-    void SubmitForm()
+    private async Task SubmitForm()
     {
-        //ShowTagForm = false;
-        List<Object> content = new List<object>() { _sessionModel, PomodorosList };
-        Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{_sessionModel.Id}/Pomodoroes", content);
         //Passer la liste des pomodoros (PomodorosList)
         //PUT api/Sessions/{id}/pomodoroes
-        //  id, _sessionModel, PomodorosList
+        //  id, PomodorosList
+        SessionId = Parameters.Get<int>("SessionId");
+        await Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes", PomodorosList );
+        ShowTagForm = false;
+        Debug.WriteLine(SessionId);
+        Debug.WriteLine(PomodorosList);
     }
-
-
-
-    
 
     void Done()
     {

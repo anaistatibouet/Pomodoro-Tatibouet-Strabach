@@ -93,41 +93,40 @@ namespace Pomodoro_api.Controllers
         }
 
         // PUT: api/Sessions/5/Pomodoroes
-        [Route("{id:int}/Pomodoroes", Name = "PutSessionInSession")]
+        [Route("{id:int}/Pomodoroes", Name = "PutPomodoroesInSession")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPomodoroesInSession(int id, Session session, List<Pomodoro> pomodoros)
+        public async Task<IHttpActionResult> PutPomodoroesInSession(int id, List<Pomodoro> pomodoros)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != session.Id)
-            {
-                return BadRequest();
-            }
+            pomodoros.ForEach(delegate (Pomodoro pomodoro) {
+                //if (id != pomodoro.SessionId)
+                //{
+                //    return BadRequest();
+                //}
 
-            pomodoros.ForEach(delegate(Pomodoro pomodoro){
                 db.Entry(pomodoro).State = EntityState.Modified;
             });
-            
+
             try
             {
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SessionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                //if (!SessionExists(id))
+                //{
+                //  return NotFound();
+                //}
+                //else
+                //{
+                throw;
+                //}
             }
-
             return StatusCode(HttpStatusCode.NoContent);
         }
 
