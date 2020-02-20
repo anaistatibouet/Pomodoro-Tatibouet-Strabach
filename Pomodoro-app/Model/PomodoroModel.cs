@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Pomodoro.Model
 {
@@ -14,12 +10,10 @@ namespace Pomodoro.Model
         [Required]
         public int Position { get; set; }
 
-
         [Required]
         public int SessionId { get; set; }
 
         public SessionModel Session { get; set; }
-
 
         public int? TagId { get; set; }
 

@@ -3,77 +3,77 @@
 @using Model;
 @inject IToastService toastService;
 
-    <div class="m-5">
-        @if (Insert)
-        {
-            <EditForm Model="@_tagModel" OnValidSubmit="addTag">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Ajout</h2>
-                <div class="formSession m-auto" style="width:30vw;">
-                    <div class="form-group">
-                        <InputText class="form-control" id="name" @bind-Value="_tagModel.Name" placeholder="@Placeholder" />
-                    </div>
-                    <button type="submit" class="btn btn-primary m-auto" style="display:block;">Ajouter</button>
+<div class="m-5">
+    @if (Insert)
+    {
+        <EditForm Model="@_tagModel" OnValidSubmit="addTag">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Ajout</h2>
+            <div class="formSession m-auto" style="width:30vw;">
+                <div class="form-group">
+                    <InputText class="form-control" id="name" @bind-Value="_tagModel.Name" placeholder="@Placeholder" />
                 </div>
-            </EditForm>
-        }
-        else
-        {
-            <EditForm Model="@_tagModel">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Modifier</h2>
-                <div class="formSession m-auto" style="width:30vw;">
-                    <div class="form-group">
-                        <input class="form-control" id="name" @bind="_tagModel.Name" name="_tagModel.Name" />
-                    </div>
-                    <button class="btn btn-primary m-auto" @onclick="@SaveTag">Modifier</button>
+                <button type="submit" class="btn btn-primary m-auto" style="display:block;">Ajouter</button>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <EditForm Model="@_tagModel">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <h2 class="text-center font-weight-bold m-5" style="margin-top:80px !important">Modifier</h2>
+            <div class="formSession m-auto" style="width:30vw;">
+                <div class="form-group">
+                    <input class="form-control" id="name" @bind="_tagModel.Name" name="_tagModel.Name" />
                 </div>
-            </EditForm>
-        }
+                <button class="btn btn-primary m-auto" @onclick="@SaveTag">Modifier</button>
+            </div>
+        </EditForm>
+    }
 
-        <div>
-            <img src="../medias/images/kitten-2.png" alt="kitten" class="kitten-left" />
-        </div>
-        <table class="table m-auto" style="width:60vw; margin-top: 150px !important">
-            <thead class="thead-dark">
+    <div>
+        <img src="../medias/images/kitten-2.png" alt="kitten" class="kitten-left" />
+    </div>
+    <table class="table m-auto" style="width:60vw; margin-top: 150px !important">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (TagsList.Count == 0)
+            {
                 <tr>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Actions</th>
+
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-dark" role="status"></div>
+                            <p class="ml-3 mt-2">@LoadingMessage</p>
+                        </div>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @if (TagsList.Count == 0)
+            }
+            else
+            {
+                @foreach (TagModel item in TagsList)
                 {
                     <tr>
-
                         <td>
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border text-dark" role="status"></div>
-                                <p class="ml-3 mt-2">@LoadingMessage</p>
-                            </div>
+                            @item.Name
+                        </td>
+                        <td>
+                            <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditTag(@item.Id))"></span></button>
+                            <button class="btn btn-danger" @onclick="@(() => DeleteTag(@item.Id))"><span class="oi oi-trash text-white"></span></button>
                         </td>
                     </tr>
                 }
-                else
-                {
-                    @foreach (TagModel item in TagsList)
-                    {
-                        <tr>
-                            <td>
-                                @item.Name
-                            </td>
-                            <td>
-                                <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditTag(@item.Id))"></span></button>
-                                <button class="btn btn-danger" @onclick="@(() => DeleteTag(@item.Id))" ><span class="oi oi-trash text-white"></span></button>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code{
 
@@ -87,7 +87,6 @@
 
     private bool Insert = true;
     private bool ConfirmDelete { get; set; }
-
 
     // Requête POST pour ajouter un Tag
     #region Adding

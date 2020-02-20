@@ -19,7 +19,6 @@
                     <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
                 </div>
 
-
                 <div class="form-group">
                     <label>Nombre de pomodoros</label>
                     <InputNumber class="form-control" id="nbPomodoro" @bind-Value="_sessionModel.NbPomodoros" />
@@ -29,7 +28,7 @@
         </EditForm>
     }
     else
-        {
+    {
         <EditForm Model="@_sessionModel">
             <DataAnnotationsValidator />
             <ValidationSummary />
@@ -42,9 +41,9 @@
                 </div>
 
                 @*<div class="form-group">
-                    <label>Nombre de pomodoros</label>
-                    <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" name="_sessionModel.NbPomodoros" />
-                </div>*@
+                        <label>Nombre de pomodoros</label>
+                        <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" name="_sessionModel.NbPomodoros" />
+                    </div>*@
                 <button class="btn btn-primary m-auto" @onclick="@SaveSession">Modifier</button>
             </div>
         </EditForm>
@@ -89,7 +88,7 @@
                         </td>
                         <td>
                             @item.NbPomodoros
-                            <button  @onclick="@(() => ShowModalTag(@item.Id))" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
+                            <button @onclick="@(() => ShowModalTag(@item.Id))" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                         </td>
                         <td>
                             <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
@@ -144,7 +143,7 @@
             StateHasChanged();
         }
     }
-    #endregion 
+    #endregion
 
     // Requête GET pour afficher les sessions
     #region Display
