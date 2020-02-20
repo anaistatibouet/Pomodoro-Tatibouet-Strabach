@@ -104,11 +104,6 @@ namespace Pomodoro_api.Controllers
             }
 
             pomodoros.ForEach(delegate (Pomodoro pomodoro) {
-                //if (id != pomodoro.SessionId)
-                //{
-                //    return BadRequest();
-                //}
-
                 db.Entry(pomodoro).State = EntityState.Modified;
             });
 
@@ -118,14 +113,14 @@ namespace Pomodoro_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                //if (!SessionExists(id))
-                //{
-                //  return NotFound();
-                //}
-                //else
-                //{
-                throw;
-                //}
+                if (!SessionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
             return StatusCode(HttpStatusCode.NoContent);
         }
