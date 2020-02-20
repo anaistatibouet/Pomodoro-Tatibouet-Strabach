@@ -5,30 +5,31 @@
 
 @if (ShowTagForm)
 {
-    <div>
-        <div class="d-inline-block" style="max-height: 50vh; overflow-y:scroll !important;">
-            @foreach (PomodoroModel pomodoro in PomodorosList)
-            {
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Pomodoro @(pomodoro.Position + 1)</label>
+    <EditForm Model="@_pomodoroModel" OnValidSubmit="@SubmitForm">
+        <div>
+            <div class="d-inline-block" style="max-height: 50vh; overflow-y:scroll !important;">
+                @foreach (PomodoroModel pomodoro in PomodorosList)
+                {
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Pomodoro @(pomodoro.Position + 1)</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01" @bind="pomodoro.TagId">
+                            <option value="">--please choose a tag--</option>
+                            @foreach (TagModel tag in TagsList)
+                            {
+                                <option value=@tag.Id>@tag.Name</option>
+                            }
+                        </select>
                     </div>
-
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option value="">--please choose an option--</option>
-                        @foreach (TagModel tag in TagsList)
-                        {
-                            <option value=@tag.Id>@tag.Name</option>
-                        }
-                    </select>
-                </div>
-            }
+                }
+            </div>
         </div>
-    </div>
-    <div class="mt-3">
-        <button @onclick="SubmitForm" class="btn btn-primary">Valider</button>
-        <button @onclick="Cancel" class="btn btn-secondary">Annuler</button>
-    </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Valider</button>
+            <button @onclick="Cancel" class="btn btn-secondary">Annuler</button>
+        </div>
+    </EditForm>
 }
 else
 {
@@ -48,16 +49,13 @@ else
     HttpClient Http = new HttpClient();
     int SessionId { get; set; }
 
+    // Permet d'associer les tags aux pomodoros d'une session
+    // On passe en paramètre l'id de la session
     private async Task SubmitForm()
     {
-        //Passer la liste des pomodoros (PomodorosList)
-        //PUT api/Sessions/{id}/pomodoroes
-        //  id, PomodorosList
         SessionId = Parameters.Get<int>("SessionId");
-        await Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes", PomodorosList );
+        await Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes", PomodorosList);
         ShowTagForm = false;
-        Debug.WriteLine(SessionId);
-        Debug.WriteLine(PomodorosList);
     }
 
     void Done()

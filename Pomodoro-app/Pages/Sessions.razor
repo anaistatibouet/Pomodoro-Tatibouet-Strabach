@@ -144,7 +144,7 @@
             StateHasChanged();
         }
     }
-    #endregion Inserting
+    #endregion 
 
     // Requête GET pour afficher les sessions
     #region Display
@@ -184,9 +184,6 @@
     {
         var parameters = new ModalParameters();
         parameters.Add("SessionId", Id);
-
-        Debug.WriteLine(Id);
-
         Modal.OnClose += ModalClosed;
         Modal.Show<TagsModal>("Tags pomodoros", parameters);
 
