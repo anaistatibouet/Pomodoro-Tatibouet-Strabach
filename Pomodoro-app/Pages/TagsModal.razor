@@ -50,8 +50,17 @@ else
 
     void SubmitForm()
     {
-        ShowTagForm = false;
+        //ShowTagForm = false;
+        List<Object> content = new List<object>() { _sessionModel, PomodorosList };
+        Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{_sessionModel.Id}/Pomodoroes", content);
+        //Passer la liste des pomodoros (PomodorosList)
+        //PUT api/Sessions/{id}/pomodoroes
+        //  id, _sessionModel, PomodorosList
     }
+
+
+
+    
 
     void Done()
     {

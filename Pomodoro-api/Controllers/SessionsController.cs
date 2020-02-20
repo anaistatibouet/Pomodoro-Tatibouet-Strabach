@@ -92,6 +92,45 @@ namespace Pomodoro_api.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // PUT: api/Sessions/5/Pomodoroes
+        [Route("{id:int}/Pomodoroes", Name = "PutSessionInSession")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutPomodoroesInSession(int id, Session session, List<Pomodoro> pomodoros)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != session.Id)
+            {
+                return BadRequest();
+            }
+
+            pomodoros.ForEach(delegate(Pomodoro pomodoro){
+                db.Entry(pomodoro).State = EntityState.Modified;
+            });
+            
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SessionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
         // POST: api/Sessions
         [Route("", Name = "PostSession")]
         [HttpPost]
