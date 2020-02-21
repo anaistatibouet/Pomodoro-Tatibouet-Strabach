@@ -5,32 +5,31 @@
 
 ### Fonctionnalités implémentées
 
-<u>Pomodoro</u> : 
+**Pomodoro** : 
     Déroulement du décompte : <br>
     - Démarrer un décompte <br>
     - Mettre en pause le pomodoro en cours de décompte <br> 
     - Réinitialiser décompte <br>
     - Passage d'un pomodoro à l'autre (25+5 ou 25+15) <br>
-<u>Tags</u> : <br>
+    - Démarrer le pomodoro à partir de la liste des sessions <br>
+**Tags** : <br>
     - Ajout d'un tag <br>
     - Modification d'un tag <br>
     - Suppression d'un tag <br>
     - Affichage de la liste des tags <br>
     - Affichage des tags dans la liste déroulante pour l'associer à un pomodoro <br>
     - Gestion du chargement des tags <br>
-<u>Sessions</u> : <br>
+**Sessions** : <br>
     - Affichage des sessions <br>
     - Ajout d'une session <br>
-<u>Historique</u> : <br>
+    - Modifier une session <br>
+    - Supprimer une session <br>
+    - Créer les pomodoros en fonction du nombre de pomodoros <br>
+    - Associer les tags aux pomodoros <br>
+**Historique** : <br>
     - Liste des pomodoros passés avec la date et le tag associés <br>
-
-**Todo** : <br>
-    - Créer un pomodoro <br>
-    - Ajouter des tags aux blocs de pomodoro <br>
-    - Editer une sequence : (BDD) <br>
-    - Ajouter de nouveaux blocs <br>
-    - Retirer des blocs <br>
-    - Afficher l'historique/stats pour les sessions <br>
+    - Trier le tableau par date <br>
+    - Trier le tableau par tags <br>
     
 ## Utilisation de l'api
 > Les différentes routes apparaissent en commentaire de chaque fonction dans les Controllers du projet "Pomodoro-api"
