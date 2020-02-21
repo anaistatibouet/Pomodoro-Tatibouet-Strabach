@@ -3,20 +3,21 @@
 @using System.Diagnostics;
 
 <div class="m-5">
+    <p>@val</p>
     <div class="d-flex"> 
         <div class="input-group mr-2" style="width: 20vw">
-            <div class="input-group-prepend"  style="height:35px">
+            <div class="input-group-prepend">
                 <span class="input-group-text"><span class="oi oi-tag"></span></span>
             </div>
             <input type="text" class="form-control" placeholder="Rechercher par tag">
         </div>
-        <div class="input-group mr-2"  style="width: 20vw">
-            <div class="input-group-prepend" style="height:35px">
+        <div class="input-group mr-2" style="width: 20vw">
+            <div class="input-group-prepend">
                 <span class="input-group-text"><span class="oi oi-calendar"></span></span>
             </div>
             <input type="date" id="datepomodoro" name="pomodoroDate" class="form-control"
-                   value="@dateMax"
-                   min="2018-01-01" max="@dateMax">
+                   value="@val"
+                   min="2018-01-01" max="@val">
         </div>
         <div>
             <button class="btn btn-primary"><span class="oi oi-magnifying-glass mr-1"></span></button>
@@ -65,14 +66,22 @@
     HistoryModel _historyModel = new HistoryModel();
     HttpClient Http = new HttpClient();
     private DateTime dateMax { get; set; }
+    private string val { get; set; }
 
     List<HistoryModel> HistoriesList = new List<HistoryModel>();
 
     protected override void OnInitialized()
     {
         // J'arrive pas à afficher la date d'ajd dans le input
-        this.dateMax =  DateTime.Now;
+        this.dateMax = DateTime.Now;
         Debug.WriteLine(this.dateMax);
+
+        // creating object of DateTime 
+        this.dateMax = new DateTime();
+
+        // getting ShortTime from DateTime 
+        // using ToShortDateString() method; 
+        this.val = dateMax.ToShortDateString();
     }
 
     protected override async Task OnInitializedAsync()

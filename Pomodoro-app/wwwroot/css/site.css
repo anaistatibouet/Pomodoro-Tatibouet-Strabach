@@ -176,11 +176,6 @@ app {
     background-color: #0b2d76 !important;
 }
 
-.form-control:focus {
-    border-color: rgba(255,255,255,0.1);
-    box-shadow: none;
-}
-
 #blazor-error-ui .dismiss {
     cursor: pointer;
     position: absolute;

@@ -15,7 +15,7 @@
             </h2>
             <div class="formSession m-auto" style="width:30vw">
                 <div class="form-group">
-                    <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="Nom de la session" />
+                    <InputText class="form-control" id="name" @bind-Value="_sessionModel.Name" placeholder="@Placeholder" />
                 </div>
 
                 <div class="form-group">
@@ -130,7 +130,7 @@
 
         if (res.IsSuccessStatusCode)
         {
-            StatusMessage = "La session a bien été crée";
+            StatusMessage = "La session a bien été ajoutée";
             toastService.ShowSuccess(StatusMessage);
             SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
             StateHasChanged();

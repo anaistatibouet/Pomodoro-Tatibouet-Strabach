@@ -76,14 +76,7 @@
     /// </summary>
     public void changeMode()
     {
-        if (!lazyMode)
-        {
-            lazyMode = true;
-        }
-        else
-        {
-            lazyMode = false;
-        }
+        lazyMode = !lazyMode;
     }
     #endregion
 
@@ -114,27 +107,13 @@
         {
             modeBtn = mode[1];
 
-            if (!breakState)
-            {
-                pomodoroTitle = pomodoroState[0];
-            }
-            else
-            {
-                pomodoroTitle = pomodoroState[1];
-            }
+            pomodoroTitle = breakState ? pomodoroState[1] : pomodoroState[0];
         }
         else
         {
             modeBtn = mode[0];
 
-            if (!breakState)
-            {
-                pomodoroTitle = pomodoroState[1];
-            }
-            else
-            {
-                pomodoroTitle = pomodoroState[0];
-            }
+            pomodoroTitle = breakState ? pomodoroState[0] : pomodoroState[1];
         }
     }
     #endregion
