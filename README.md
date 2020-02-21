@@ -1,6 +1,24 @@
 # Pomodoro
 > Benjamin Strabach - Anaïs TATIBOUËT
 
+<pre>
+       _                        
+       \`*-.                    
+        )  _`-.                 
+       .  : `. .                
+       : _   '  \               
+       ; *` _.   `*-._          
+       `-.-'          `-.       
+         ;       `       `.     
+         :.       .        \    
+         . \  .   :   .-'   .   
+         '  `+.;  ;  '      :   
+         :  '  |    ;       ;-. 
+         ; '   : :`-:     _.`* ;
+      .*' /  .*' ; .*`- +'  `*' 
+      `*-*   `*-*  `*-*'
+</pre>
+
 ## Application Blazor
 
 ### Fonctionnalités implémentées
