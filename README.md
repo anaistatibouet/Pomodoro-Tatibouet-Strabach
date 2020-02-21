@@ -5,7 +5,7 @@
 
 ### Fonctionnalités implémentées
 
-**Pomodoro** :e<br>
+**Pomodoro** :<br>
     Déroulement du décompte : <br>
     - Démarrer un décompte <br>
     - Mettre en pause le pomodoro en cours de décompte <br> 
