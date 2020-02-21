@@ -5,7 +5,7 @@
 
 ### Fonctionnalités implémentées
 
-**Pomodoro** : 
+**Pomodoro** :e<br>
     Déroulement du décompte : <br>
     - Démarrer un décompte <br>
     - Mettre en pause le pomodoro en cours de décompte <br> 
@@ -22,11 +22,11 @@
 **Sessions** : <br>
     - Affichage des sessions <br>
     - Ajout d'une session <br>
-    - Modifier une session <br>
     - Supprimer une session <br>
     - Créer les pomodoros en fonction du nombre de pomodoros <br>
     - Associer les tags aux pomodoros <br>
 **Historique** : <br>
+    - Enregistrment de la date et du tag dans l'historique<br>
     - Liste des pomodoros passés avec la date et le tag associés <br>
     - Trier le tableau par date <br>
     - Trier le tableau par tags <br>
