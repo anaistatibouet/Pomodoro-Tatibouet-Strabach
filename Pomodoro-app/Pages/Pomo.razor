@@ -3,7 +3,6 @@
 @using System.Threading;
 @using Data;
 @using System;
-@using System.Diagnostics;
 
 <div class="bgPomodoro">
     <div class="card text-center m-auto" style="width: 30vw;">
@@ -13,7 +12,7 @@
         </div>
         <div class="card-body">
             <div class="p-2 text-white tag-container m-auto" style="width:20vw">
-                <p class="m-0">Projet DotNet</p>
+                <p class="m-0">@tagName</p>
             </div>
             <h1 class="m-4">@timeElapsedString</h1>
             <button class="btn btn-success actiontimer" @onclick="Start"><span class="oi oi-media-play"></span></button>
@@ -34,7 +33,7 @@
 </div>
 
 @code {
-        #region Declarations
+    #region Declarations
 
     [Parameter]
     public int SessionId { get; set; }
@@ -42,9 +41,13 @@
     HttpClient Http = new HttpClient();
 
     private List<PomodoroModel> pomodoroesList = new List<PomodoroModel>();
+    private List<TagModel> tagsList = new List<TagModel>();
+    
 
-    private Session currentSession = new Session();
     private HistoryModel historyModel = new HistoryModel();
+    private TagModel TagModel = new TagModel();
+    private PomodoroModel PomodoroModel = new PomodoroModel();
+    private Session currentSession = new Session();
 
     private TimeSpan t { get; set; }
     private DateTime pomodoroDate { get; set; }
@@ -59,6 +62,7 @@
     private string[] mode = new string[] { "mode studieux", "mode flemme" };
     private string startBtn = "Démarrer";
     private string modeBtn;
+    private string tagName { get; set; }
 
     private bool lazyMode = false;
     private bool isStarted { get; set; }
@@ -66,6 +70,7 @@
 
     #endregion
 
+    #region API Requests
     public void initSession()
     {
         List<Countdown> sequence = new List<Countdown>();
@@ -76,11 +81,27 @@
         this.currentSession.Sequence = sequence;
     }
 
+    // Permet de récupérer les pomodoros de la session choisie
     protected override async Task OnInitializedAsync()
     {
+        tagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
+
         pomodoroesList = await Http.GetJsonAsync<List<PomodoroModel>>($"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes");
         initSession();
     }
+
+    // Enregistre le pomodoro dans l'historique à la fin du décompte
+    public async void addHistory()
+    {
+        this.pomodoroDate = DateTime.Now;
+        var pomodoro = this.pomodoroesList.Find(pomo => pomo.Position == currentSession.ActivePomodoro);
+        int tag = (int)pomodoro.TagId;
+        var _historyModel = new HistoryModel { Date = this.pomodoroDate, TagId = tag };
+
+        var RequestUri = "https://localhost:44313/api/Histories";
+        await Http.PostAsJsonAsync(RequestUri, _historyModel);
+    }
+    #endregion
 
     #region Actions pomodoro
     public void Start()
@@ -111,7 +132,6 @@
     #endregion
 
     #region Display
-
     public void TimeElapsed()
     {
         timeElapsed = currentPomodoro.TimeElapsed();
@@ -126,23 +146,13 @@
         }
     }
 
-    public async void addHistory()
-    {
-        this.pomodoroDate = DateTime.Now;
-        var pomodoro = this.pomodoroesList.Find(pomo => pomo.Position == currentSession.ActivePomodoro);
-        int tag = (int)pomodoro.TagId;
-        var _historyModel = new HistoryModel { Date = this.pomodoroDate, TagId = tag };
-
-        var RequestUri = "https://localhost:44313/api/Histories";
-        await Http.PostAsJsonAsync(RequestUri, _historyModel);
-    }
-
-
+    // Permet d'afficher le numéro du pomodoro actif
     public int GetActivePomodoro()
     {
         return this.ActivePomodoro = currentSession.ActivePomodoro + 1;
     }
 
+    // Permet d'afficher le titre du pomodoro
     public void GetPomodoroString()
     {
         breakState = currentPomodoro.GetBreakState();
@@ -159,6 +169,11 @@
 
             pomodoroTitle = breakState ? pomodoroState[0] : pomodoroState[1];
         }
+    }
+
+    
+    public void getTagName()
+    {
     }
     #endregion
 

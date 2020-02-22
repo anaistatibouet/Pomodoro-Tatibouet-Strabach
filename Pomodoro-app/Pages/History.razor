@@ -4,16 +4,17 @@
 
     <div class="m-5">
         <div class="d-flex">
-            <EditForm Model="@_historyModel" OnValidSubmit="@GetTag">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+            <EditForm Model="@_tagModel" OnValidSubmit="@GetTag">
                 <div class="input-group mr-2" style="width: 20vw">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><span class="oi oi-tag"></span></span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Rechercher par tag" @bind-value="@TagSearch">
+                    <select class="custom-select" id="inputGroupSelect01" @bind="@TagSearch">
+                        <option value="0">Aucun filtre</option>
+                        @foreach (TagModel tag in TagsList)
+                        {
+                            <option value=@tag.Id>@tag.Name</option>
+                        }
+                    </select>
                     <div class="ml-2 mr-2">
-                        <button class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
+                        <button type="submit" class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
                     </div>
                 </div>
             </EditForm>
@@ -24,7 +25,7 @@
                         <span class="input-group-text"><span class="oi oi-calendar"></span></span>
                     </div>
                     <input type="date" id="datepomodoro" name="pomodoroDate" class="form-control"
-                           value="@DateSearch.ToShortDateString()"
+                           value="@DateSearch"
                            min="2018-01-01" max="@dateMax">
                     <div class="ml-2 mr-2">
                         <button class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
@@ -40,31 +41,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            10/05/2020
-                        </td>
-                        <td>
-                            Projet C#
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            10/02/2020
-                        </td>
-                        <td>
-                            MSPR - Dev
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            10/02/2020
-                        </td>
-                        <td>
-                            Projet Dotnet
-                        </td>
-                    </tr>
-                </tbody>
+                    @if (HistoriesList.Count == 0)
+                    {
+                        <tr>
+
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-dark" role="status"></div>
+                                    <p class="ml-3 mt-2">@LoadingMessage</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (HistoryModel item in DisplayedList)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Date
+                                </td>
+
+                                <td>
+                                    @TagsList.Where(t => t.Id == item.TagId).First().Name
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
             </table>
             <div>
                 <img src="../medias/images/kitten-3.png" alt="kitten" class="kitten-right" style="width:14vw" />
@@ -72,36 +76,45 @@
     </div>
 
 @code {
-    HistoryModel _historyModel = new HistoryModel();
+
     HttpClient Http = new HttpClient();
-    private DateTime dateMax { get; set; }
-    private string TagSearch { get; set; }
-    private DateTime DateSearch { get; set; }
-    private List<TagModel> TagsList = new List<TagModel>();
+    HistoryModel _historyModel = new HistoryModel();
+    TagModel _tagModel = new TagModel();
 
     private List<HistoryModel> HistoriesList = new List<HistoryModel>();
+    private List<TagModel> TagsList = new List<TagModel>();
+    private List<HistoryModel> DisplayedList = new List<HistoryModel>();
 
-    protected override void OnInitialized()
-    {
-        // J'arrive pas à afficher la date d'ajd dans le input
-        this.dateMax = DateTime.Now;
-        Debug.WriteLine(this.dateMax);
-    }
+    private DateTime dateMax { get; set; }
+    private DateTime DateSearch { get; set; }
+
+    private int TagSearch { get; set; }
+    private string LoadingMessage = "Chargement de l'historique en cours...";
 
     protected override async Task OnInitializedAsync()
     {
         TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
         HistoriesList = await Http.GetJsonAsync<List<HistoryModel>>("https://localhost:44313/api/Histories");
+        DisplayedList = HistoriesList;
     }
 
     public void GetTag()
     {
+        if(TagSearch == 0)
+        {
+            DisplayedList = HistoriesList;
+        }
+        else
+        {
+            DisplayedList = HistoriesList.Where(t => t.TagId == TagSearch).ToList();
+        }
+
         Debug.WriteLine(this.TagSearch);
 
     }
 
     public void GetDate()
     {
-        Debug.WriteLine(this.DateSearch.ToShortDateString());
+        Debug.WriteLine(this.DateSearch);
     }
 }
