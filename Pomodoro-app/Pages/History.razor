@@ -3,30 +3,35 @@
 @using System.Diagnostics;
 
     <div class="m-5">
-        <EditForm Model="@_historyModel" OnValidSubmit="@getTag">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <p>@val</p>
-            <div class="d-flex">
+        <div class="d-flex">
+            <EditForm Model="@_historyModel" OnValidSubmit="@GetTag">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="input-group mr-2" style="width: 20vw">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-tag"></span></span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Rechercher par tag" @bind-value="@test">
+                    <input type="text" class="form-control" placeholder="Rechercher par tag" @bind-value="@TagSearch">
+                    <div class="ml-2 mr-2">
+                        <button class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
+                    </div>
                 </div>
+            </EditForm>
+            <EditForm Model="@_historyModel" OnValidSubmit="@GetDate">
+                <DataAnnotationsValidator />
                 <div class="input-group mr-2" style="width: 20vw">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-calendar"></span></span>
                     </div>
                     <input type="date" id="datepomodoro" name="pomodoroDate" class="form-control"
-                           value="@val"
-                           min="2018-01-01" max="@val">
+                           value="@DateSearch.ToShortDateString()"
+                           min="2018-01-01" max="@dateMax">
+                    <div class="ml-2 mr-2">
+                        <button class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
+                    </div>
                 </div>
-                <div>
-                    <button class="btn btn-primary"><span class="oi oi-magnifying-glass mr-1"></span></button>
-                </div>
-            </div>
             </EditForm>
+        </div>
             <table class="table ml-5" style="width:50vw; margin-top: 14vh !important">
                 <thead class="thead-dark">
                     <tr>
@@ -67,11 +72,11 @@
     </div>
 
 @code {
-        HistoryModel _historyModel = new HistoryModel();
-        HttpClient Http = new HttpClient();
+    HistoryModel _historyModel = new HistoryModel();
+    HttpClient Http = new HttpClient();
     private DateTime dateMax { get; set; }
-    private string val { get; set; }
-    private string test { get; set; }
+    private string TagSearch { get; set; }
+    private DateTime DateSearch { get; set; }
     private List<TagModel> TagsList = new List<TagModel>();
 
     private List<HistoryModel> HistoriesList = new List<HistoryModel>();
@@ -85,12 +90,18 @@
 
     protected override async Task OnInitializedAsync()
     {
+        TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
         HistoriesList = await Http.GetJsonAsync<List<HistoryModel>>("https://localhost:44313/api/Histories");
     }
 
-    public void getTag()
+    public void GetTag()
     {
-        Debug.WriteLine(this.test);
+        Debug.WriteLine(this.TagSearch);
 
+    }
+
+    public void GetDate()
+    {
+        Debug.WriteLine(this.DateSearch.ToShortDateString());
     }
 }
