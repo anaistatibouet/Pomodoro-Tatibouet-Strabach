@@ -34,7 +34,7 @@
 </div>
 
 @code {
-    #region Declarations
+        #region Declarations
 
     [Parameter]
     public int SessionId { get; set; }
@@ -44,7 +44,10 @@
     private List<PomodoroModel> pomodoroesList = new List<PomodoroModel>();
 
     private Session currentSession = new Session();
+    private HistoryModel historyModel = new HistoryModel();
+
     private TimeSpan t { get; set; }
+    private DateTime pomodoroDate { get; set; }
     private dynamic currentPomodoro => currentSession.Sequence[currentSession.ActivePomodoro];
 
     private int ActivePomodoro { get; set; }
@@ -60,6 +63,7 @@
     private bool lazyMode = false;
     private bool isStarted { get; set; }
     private bool breakState;
+
     #endregion
 
     public void initSession()
@@ -74,7 +78,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
         pomodoroesList = await Http.GetJsonAsync<List<PomodoroModel>>($"https://localhost:44313/api/Sessions/{SessionId}/Pomodoroes");
         initSession();
     }
@@ -117,9 +120,23 @@
         // Affichage du pomodoro avec les minutes et les secondes
         timeElapsedString = string.Format("{0:D2} : {1:D2}", t.Minutes, t.Seconds);
 
-        // TODO : Enregistrer une entrée dans l'historique (POST)
-
+        if ((t.Minutes == 0) && (t.Seconds == 0) && (isStarted))
+        {
+            addHistory();
+        }
     }
+
+    public async void addHistory()
+    {
+        this.pomodoroDate = DateTime.Now;
+        var pomodoro = this.pomodoroesList.Find(pomo => pomo.Position == currentSession.ActivePomodoro);
+        int tag = (int)pomodoro.TagId;
+        var _historyModel = new HistoryModel { Date = this.pomodoroDate, TagId = tag };
+
+        var RequestUri = "https://localhost:44313/api/Histories";
+        await Http.PostAsJsonAsync(RequestUri, _historyModel);
+    }
+
 
     public int GetActivePomodoro()
     {

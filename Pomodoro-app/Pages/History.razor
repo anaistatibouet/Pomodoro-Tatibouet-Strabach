@@ -81,13 +81,6 @@
         // J'arrive pas à afficher la date d'ajd dans le input
         this.dateMax = DateTime.Now;
         Debug.WriteLine(this.dateMax);
-
-        // creating object of DateTime 
-        this.dateMax = new DateTime();
-
-        // getting ShortTime from DateTime 
-        // using ToShortDateString() method; 
-        this.val = dateMax.ToShortDateString();
     }
 
     protected override async Task OnInitializedAsync()
@@ -99,5 +92,5 @@
     {
         Debug.WriteLine(this.test);
 
-     }
+    }
 }
