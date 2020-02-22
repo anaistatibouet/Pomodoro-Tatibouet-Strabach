@@ -5,9 +5,7 @@
 @inject IToastService toastService;
 
 <div class="m-5">
-    @if (Insert)
-    {
-        <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
+    <EditForm Model="@_sessionModel" OnValidSubmit="addSession">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <h2 class="text-center font-weight-bold m-5">
@@ -25,28 +23,6 @@
                 <button type="submit" class="btn btn-primary m-auto" style="display:block">Ajouter</button>
             </div>
         </EditForm>
-    }
-    else
-    {
-        <EditForm Model="@_sessionModel">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <h2 class="text-center font-weight-bold m-5">
-                Sessions
-            </h2>
-            <div class="formSession m-auto" style="width:30vw">
-                <div class="form-group">
-                    <input class="form-control" id="name" @bind="_sessionModel.Name" name="_sessionModel.Name" />
-                </div>
-
-                @*<div class="form-group">
-                        <label>Nombre de pomodoros</label>
-                        <input class="form-control" id="nbPomodoros" @bind="_sessionModel.NbPomodoros" name="_sessionModel.NbPomodoros" />
-                    </div>*@
-                <button class="btn btn-primary m-auto" @onclick="@SaveSession">Modifier</button>
-            </div>
-        </EditForm>
-    }
 
     <div>
         <img src="../medias/images/kitten.png" alt="kitten" class="kitten-left" />
@@ -57,7 +33,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Nombre de pomodoros</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Supprimer</th>
                 <th scope="col">Démarrer</th>
             </tr>
         </thead>
@@ -90,7 +66,6 @@
                             <button @onclick="@(() => ShowModalTag(@item.Id))" class="btn btn-sm ml-4 tagBtn text-white">Choisir tags</button>
                         </td>
                         <td>
-                            <button class="btn btn-primary mr-3"><span class="oi oi-pencil" @onclick="@(() => EditSession(@item.Id))"></span></button>
                             <button class="btn btn-danger" @onclick="@(() => DeleteSession(@item.Id))"><span class="oi oi-trash text-white"></span></button>
                         </td>
                         <td>
@@ -117,7 +92,6 @@
     private string StatusMessage { get; set; }
     private string Placeholder = "Nom de la session";
 
-    private bool Insert = true;
     private bool ConfirmDelete { get; set; }
 
     // Requête POST pour ajouter une session
@@ -158,23 +132,6 @@
     {
         await Http.DeleteAsync($"https://localhost:44313/api/Sessions/{SessionId}");
         SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
-    }
-    #endregion
-
-    // Requête PUT pour modifier une session
-    #region Edition
-    private void EditSession(int id)
-    {
-        this.Insert = false;
-        var editSession = SessionsList.Single(i => i.Id == id);
-        _sessionModel = new SessionModel { Id = editSession.Id, Name = editSession.Name, NbPomodoros = editSession.NbPomodoros };
-    }
-
-    private async Task SaveSession()
-    {
-        await Http.PutJsonAsync($"https://localhost:44313/api/Sessions/{_sessionModel.Id}", _sessionModel);
-        SessionsList = await Http.GetJsonAsync<List<SessionModel>>("https://localhost:44313/api/Sessions");
-        this.Insert = true;
     }
     #endregion
 

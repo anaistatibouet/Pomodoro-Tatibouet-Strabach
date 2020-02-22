@@ -41,11 +41,13 @@ else
 @code {
     [CascadingParameter] ModalParameters Parameters { get; set; }
     HttpClient Http = new HttpClient();
-    bool ShowTagForm { get; set; } = true;
+
     private List<TagModel> TagsList = new List<TagModel>();
     private List<PomodoroModel> PomodorosList = new List<PomodoroModel>();
     private SessionModel _sessionModel = new SessionModel();
     private PomodoroModel _pomodoroModel = new PomodoroModel();
+
+    bool ShowTagForm { get; set; } = true;
     private int SessionId { get; set; }
 
     // Permet d'associer les tags aux pomodoros d'une session
