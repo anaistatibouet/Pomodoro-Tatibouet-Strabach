@@ -180,6 +180,12 @@ app {
 
 }
 
+.nb-pomodoros {
+    font-size:15px;
+    color: #0b2d76;
+    font-weight: bold;
+}
+
 .tagBtn {
     background-color: #0b2d76 !important;
 }
