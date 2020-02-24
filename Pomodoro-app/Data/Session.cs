@@ -10,7 +10,7 @@ namespace Pomodoro.Data
 
         public Session()
         {
-            this.Sequence.Add(new Countdown(0, this));
+            this.Sequence.Add(new Countdown(0, this, ""));
         }
 
         /// <summary>
@@ -22,7 +22,6 @@ namespace Pomodoro.Data
             {
                 this.ActivePomodoro += 1;
                 Sequence[ActivePomodoro].StartPomodoro();
-                //Todo : Démarrer le pomodoro suivant
             }
             else
             {

@@ -13,15 +13,17 @@ namespace Pomodoro.Data
         private double TimerPomodoroInMilliseconds;
         private int Position { get; set; }
         private bool InBreak { get; set; }
+        private string TagName { get; set; }
 
         /// <summary>
         ///   Initialisation du pomodoro : timer et chrono.
         /// </summary>
-        public Countdown(int position, Session session)
+        public Countdown(int position, Session session, string tagName)
         {
             this.Position = position;
             this.InBreak = false;
             this.Session = session; //Accès vers la session à laquelle il appartient.
+            this.TagName = tagName;
 
             TimerPomodoroInMilliseconds = TimeSpan.FromMinutes(25).TotalMilliseconds;
             TimerPomodoro = new Timer(TimerPomodoroInMilliseconds);
@@ -62,6 +64,15 @@ namespace Pomodoro.Data
         public bool GetBreakState()
         {
             return InBreak;
+        }
+
+        /// <summary>
+        /// Retourne l'e nom du tag en string
+        /// </summary>
+        /// <returns></returns>
+        public string GetTagName()
+        {
+            return TagName;
         }
 
         /// <summary>
