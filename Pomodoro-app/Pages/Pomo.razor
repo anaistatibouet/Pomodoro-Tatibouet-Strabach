@@ -3,6 +3,7 @@
 @using System.Threading;
 @using Data;
 @using System;
+@using System.Diagnostics;
 
 <div class="bgPomodoro">
     <div class="card text-center m-auto" style="width: 30vw;">
@@ -42,7 +43,7 @@
 
     private List<PomodoroModel> pomodoroesList = new List<PomodoroModel>();
     private List<TagModel> tagsList = new List<TagModel>();
-    
+
 
     private HistoryModel historyModel = new HistoryModel();
     private TagModel TagModel = new TagModel();
@@ -62,7 +63,7 @@
     private string[] mode = new string[] { "mode studieux", "mode flemme" };
     private string startBtn = "Démarrer";
     private string modeBtn;
-    private string tagName { get; set; }
+    private dynamic tagName => currentSession.Sequence[currentSession.ActivePomodoro].GetTagName();
 
     private bool lazyMode = false;
     private bool isStarted { get; set; }
@@ -71,12 +72,22 @@
     #endregion
 
     #region API Requests
+    //Initialise les Sessions
     public void initSession()
     {
         List<Countdown> sequence = new List<Countdown>();
         pomodoroesList.ForEach(delegate (PomodoroModel pomodoroModel)
         {
-            sequence.Insert(pomodoroModel.Position, new Countdown(pomodoroModel.Position, this.currentSession));
+            TagModel tag = new TagModel();
+            if (this.tagsList.Count > 0)
+            {
+                tag = this.tagsList.Find(t => t.Id == pomodoroModel.TagId); //On regarde dans le pomodoro actuel si le tag est présent
+            }
+            else
+            {
+                tag = (new TagModel { Name = "" }); //Si la tagList est vide, initialise un tag pour l'insérer dans la Session
+            }
+            sequence.Insert(pomodoroModel.Position, new Countdown(pomodoroModel.Position, this.currentSession, tag.Name));
         });
         this.currentSession.Sequence = sequence;
     }
@@ -171,7 +182,7 @@
         }
     }
 
-    
+
     public void getTagName()
     {
     }
