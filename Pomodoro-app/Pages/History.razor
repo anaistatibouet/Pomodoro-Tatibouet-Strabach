@@ -1,6 +1,5 @@
 ﻿@page "/History"
 @using Model;
-@using System.Diagnostics;
 
     <div class="m-5">
         <div class="d-flex">
@@ -68,6 +67,7 @@
 
 @code {
 
+    #region Declaration
     HttpClient Http = new HttpClient();
     HistoryModel _historyModel = new HistoryModel();
     TagModel _tagModel = new TagModel();
@@ -82,7 +82,9 @@
     private int TagSearch { get; set; }
     private int ResultCount { get; set; }
     private string LoadingMessage = "Chargement de l'historique en cours...";
+    #endregion
 
+    #region API Requests
     protected override async Task OnInitializedAsync()
     {
         TagsList = await Http.GetJsonAsync<List<TagModel>>("https://localhost:44313/api/Tags");
@@ -90,19 +92,23 @@
         DisplayedList = HistoriesList;
         this.ResultCount = HistoriesList.Count;
     }
+    #endregion
 
-    public void GetTag()
-    {
-        if(TagSearch == 0)
+    #region Search
+        // Permet d'afficher le tableau trié par le tag recherché
+        public void GetTag()
         {
-            DisplayedList = HistoriesList;
-            this.ResultCount = HistoriesList.Count;
-        }
-        else
-        {
-            DisplayedList = HistoriesList.Where(t => t.TagId == TagSearch).ToList();
-            this.ResultCount = DisplayedList.Count;
+            if(TagSearch == 0)
+            {
+                DisplayedList = HistoriesList;
+                this.ResultCount = HistoriesList.Count;
+            }
+            else
+            {
+                DisplayedList = HistoriesList.Where(t => t.TagId == TagSearch).ToList();
+                this.ResultCount = DisplayedList.Count;
 
+            }
         }
-    }
+    #endregion
 }
