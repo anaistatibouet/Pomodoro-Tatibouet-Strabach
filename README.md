@@ -46,8 +46,8 @@
 **Historique** : <br>
     - Enregistrment de la date et du tag dans l'historique<br>
     - Liste des pomodoros passés avec la date et le tag associés <br>
-    - Trier le tableau par date <br>
     - Trier le tableau par tags <br>
+    - Affichage du nombre de pomodoros trouvés <br>
     
 ## Utilisation de l'api
 > Les différentes routes apparaissent en commentaire de chaque fonction dans les Controllers du projet "Pomodoro-api"
